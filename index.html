@@ -3,16 +3,14 @@ layout: default
 title: Miracle Space
 ---
 <!--<h2>{{ page.title }}</h2>
-<p>最新文章</p>-->
+<p>最新文章</p>
 　<ul>
-        //这里使用了 Jekyll 语法，会被编译，所以加多个"\"
-        {{page.category}}
-        {% for post in site.categories.[page.category] %}
-        <li><a href="/{{ category | first }}" title="view all
-    posts">{{post.title}}</a>
+        {% for category in site.categories %}
+        <li><a href="/{{ category | first }}/" title="view all posts">{{ category | first }} {{ category | last | size }}</a>
         </li>
         {% endfor %}
     </ul>
+    -->
 <ul>
 　　{% for post in site.posts %}
 　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} -{{site.author}}</li>
