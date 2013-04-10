@@ -13,5 +13,7 @@ title: Miracle Space
     -->
 <ul>
 　　{% for post in site.posts %}
+	{% if post.category != fiction%}
 　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} -{{site.author}}</li>
+	{% endif%}
 　　{% endfor %}　</ul>
