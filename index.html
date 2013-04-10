@@ -8,4 +8,13 @@ title: Miracle Space
 　　{% for post in site.posts %}
 　　　　<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
+　　
+　　<ul>
+        //这里使用了 Jekyll 语法，会被编译，所以加多个"\"
+        {% for category in site.categories %}
+        <li><a href="/categories/{{ category | first }}/" title="view all
+    posts">{{ category | first }} {{ category | last | size }}</a>
+        </li>
+        {% endfor %}
+    </ul>
 </ul>
