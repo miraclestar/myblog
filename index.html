@@ -6,9 +6,10 @@ title: Miracle Space
 <p>最新文章</p>-->
 　<ul>
         //这里使用了 Jekyll 语法，会被编译，所以加多个"\"
-        {% for category in site.categories %}
-        <li><a href="/{{ category | first }}/" title="view all
-    posts">{{ category | first }} {{ category | last | size }}</a>
+        {{page.category}}
+        {% for post in site.categories.[page.category] %}
+        <li><a href="/{{ category | first }}" title="view all
+    posts">{{post.title}}</a>
         </li>
         {% endfor %}
     </ul>
