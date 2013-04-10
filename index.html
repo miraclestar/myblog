@@ -7,14 +7,14 @@ title: Miracle Space
 　<ul>
         //这里使用了 Jekyll 语法，会被编译，所以加多个"\"
         {% for category in site.categories %}
-        <li><a href="/categories/{{ category | first }}/" title="view all
+        <li><a href="/{{ category | first }}/" title="view all
     posts">{{ category | first }} {{ category | last | size }}</a>
         </li>
         {% endfor %}
     </ul>
 <ul>
 　　{% for post in site.posts %}
-　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} </li>
+　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} -{{site.author}}</li>
 　　{% endfor %}
 　　
 　
