@@ -10,7 +10,7 @@ title: Miracle Space
 	　　$("#t").hide();
 	　}); 
 	function showf(){
-		$("#f").toggle();
+		$("#f").toggle();		
 	}
 	function showl(){
 		$("#l").toggle();
@@ -33,16 +33,17 @@ title: Miracle Space
     </ul>
 
 <ul class='posts'>
-	<div id='f'>
-		{% for post in site.categories.fiction %}
-	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-	　　{% endfor %}
-	</div>	
 	<div id='t'>
 	　	{% for post in site.categories.tech %}
 	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 	　　{% endfor %}
 　　</div>
+	<div id='f'>
+		{% for post in site.categories.fiction %}
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　{% endfor %}
+	</div>	
+
 　	<div id='l'>
 	　	{% for post in site.categories.life %}
 	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
