@@ -5,44 +5,47 @@ title: Miracle Space
 
 <script type="text/javascript">
 	$(document).ready(function(){ 
-	　　$("#post").hide();
-	}); 
+	　　$("#f").hide();
+	　　$("#l").hide();
+	　　$("#t").hide();
+	　}); 
 	function showf(){
-		$("#f").show();
-		alert("show fiction");
+		$("#f").toggle();
 	}
 	function showl(){
-		$("#l").show();
-		alert("show life");
+		$("#l").toggle();
 	}
 	function showt(){
-		$("#t").show();
-		alert("show tech");
+		$("#t").toggle();
 	}
 </script>
 
-    <ul>
+    <ul id='nav'>
+   		<li id='tech'>
+    		<a href="javascript:void(0)" onclick="showt()">	技术文章</a>
+    	</li>
     	<li id='fiction'>
-    		<a href="javascript:void(0)" onclick="showf()">	fiction</a>
-    		<input type="button" value="test" onclick="showf()">
+    		<a href="javascript:void(0)" onclick="showf()">	随便写写</a>
     	</li>
     	<li id='life' >
-    		<a href="javascript:void(0)" onclick="showl()">	life</a>
-    	</li>
-    	<li id='tech'>
-    		<a href="javascript:void(0)" onclick="showt()">	tech</a>
-    	</li>
+    		<a href="javascript:void(0)" onclick="showl()">	生活记录</a>
+    	</li>    	
     </ul>
 
-<ul id='post'>
-	{% for post in site.categories.fiction %}
-　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-　　{% endfor %}
-　	{% for post in site.categories.tech %}
-　　	<li id='t'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-　　{% endfor %}　
-　	{% for post in site.categories.life %}
-　　	<li id='l'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-　　{% endfor %}
-　	　
+<ul class='posts'>
+	<div id='f'>
+		{% for post in site.categories.fiction %}
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　{% endfor %}
+	</div>	
+	<div id='t'>
+	　	{% for post in site.categories.tech %}
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　{% endfor %}
+　　</div>
+　	<div id='l'>
+	　	{% for post in site.categories.life %}
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　{% endfor %}
+　	</div>
 </ul>
