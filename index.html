@@ -2,6 +2,7 @@
 layout: default
 title: Miracle Space
 ---
+<!--
 <script type="text/javascript">
 	function showf(){
 		${"#f").show();
@@ -28,7 +29,7 @@ title: Miracle Space
     		<a href="javascript:void(0)" onclick="showt()">	tech</a>
     	</li>
     </ul>
-    
+    -->
 <ul id='post'>
 	{% for post in site.categories.fiction %}
 　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
