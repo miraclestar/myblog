@@ -3,15 +3,17 @@ layout: default
 title: Miracle Space
 ---
 <script type="text/javascript">
-	$("#post").hide();
 	function showf(){
 		${"#f").show();
+		alert("show fiction");
 	}
 	function showl(){
 		${"#l").show();
+		alert("show life");
 	}
 	function showt(){
 		${"#t").show();
+		alert("show tech");
 	}
 </script>
 
@@ -31,7 +33,8 @@ title: Miracle Space
 	{% for post in site.categories.fiction %}
 　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
-　　	{% for post in site.categories.life %}
+　
+　	{% for post in site.categories.life %}
 　　	<li id='l'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
 　	{% for post in site.categories.tech %}
