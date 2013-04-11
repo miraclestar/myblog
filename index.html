@@ -22,19 +22,19 @@ title: Miracle Space
     	<li id='life' onclick="showl()">
     		life
     	</li>
-    	<li id='tech' onclick="showt">
+    	<li id='tech' onclick="showt()">
     		tech
     	</li>
     </ul>
     
-   <ul id='post'>
+<ul id='post'>
 	{% for post in site.categories.fiction %}
 　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
 　　	{% for post in site.categories.life %}
 　　	<li id='l'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
-　	{% for post in site.categories.fiction %}
+　	{% for post in site.categories.tech %}
 　　	<li id='t'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}　　
 </ul>
