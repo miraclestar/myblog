@@ -2,27 +2,39 @@
 layout: default
 title: Miracle Space
 ---
-<!--<h2>{{ page.title }}</h2>
-<p>最新文章</p>
-　<ul>
-        {% for category in site.categories %}
-        <li><a href="/{{ category | first }}/" title="view all posts">{{ category | first }} {{ category | last | size }}</a>
-        </li>
-        {% endfor %}
+<script>
+	$("#post").hide();
+	function showf(){
+		${"#f").show();
+	}
+	function showl(){
+		${"#l").show();
+	}
+	function showt(){
+		${"#t").show();
+	}
+</scripte>
+
+    <ul>
+    	<li id='fiction' onclick="showf()">
+    		fiction
+    	</li>
+    	<li id='life' onclick="showl()">
+    		life
+    	</li>
+    	<li id='tech' onclick="showt">
+    		tech
+    	</li>
     </ul>
-    -->
-    {% for cat in site.categories %}
-    	<li>{{ cat[0] }}</li>
-	{% endfor %}
     
-<ul>
+   <ul id='post'>
 	{% for post in site.categories.fiction %}
-　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
-　　<hr>
-　　{% for post in site.posts %}
-		{% if post.category != 'fiction' %}
-　　　　	<li>{{ post.date | date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-		{% endif %}
+　　	{% for post in site.categories.life %}
+　　	<li id='l'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
+　	{% for post in site.categories.fiction %}
+　　	<li id='t'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+　　{% endfor %}　　
 </ul>
