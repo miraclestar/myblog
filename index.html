@@ -34,11 +34,11 @@ title: Miracle Space
 	{% for post in site.categories.fiction %}
 　　	<li id='f'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
-　
+　	{% for post in site.categories.tech %}
+　　	<li id='t'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+　　{% endfor %}　
 　	{% for post in site.categories.life %}
 　　	<li id='l'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 　　{% endfor %}
-　	{% for post in site.categories.tech %}
-　　	<li id='t'>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-　　{% endfor %}　　
+　	　
 </ul>
