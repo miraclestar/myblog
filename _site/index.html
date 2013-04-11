@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+  
+    <script src="/javascripts/jquery-1.9.1.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<!--    <link rel = "Shortcut Icon" href="/favicon.ico"/> -->
+    <title>Miracle Space</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1><a href="/">Miracle Space</a></h1>
+          <h2>blog of miracle</h2>
+        </header>
+<!--
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/miraclestar/miracleSpace/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/miraclestar/miracleSpace/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/miraclestar/miracleSpace" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+-->
+        <hr>
+
+        <section id="main_content">
+         <script type="text/javascript">
+	$(document).ready(function(){ 
+	　　$("#f").hide();
+	　　$("#l").hide();
+	　　$("#t").hide();
+	　}); 
+	function showf(){
+		$("#f").toggle();
+	}
+	function showl(){
+		$("#l").toggle();
+	}
+	function showt(){
+		$("#t").toggle();
+	}
+</script>
+
+    <ul id='nav'>
+   		<li id='tech'>
+    		<a href="javascript:void(0)" onclick="showt()">	技术文章</a>
+    	</li>
+    	<li id='fiction'>
+    		<a href="javascript:void(0)" onclick="showf()">	随便写写</a>
+    	</li>
+    	<li id='life' >
+    		<a href="javascript:void(0)" onclick="showl()">	生活记录</a>
+    	</li>    	
+    </ul>
+
+<ul class='posts'>
+	<div id='f'>
+		
+	　　	<li>2013/04/10 <a href="/fiction/2013/04/10/fiction.html">随笔写点东西</a></li>
+	　　
+	</div>	
+	<div id='t'>
+	　	
+	　　	<li>2013/04/11 <a href="/tech/2013/04/11/local-jekyll-config.html">本地jekyll环境配置</a></li>
+	　　
+	　　	<li>2013/04/09 <a href="/tech/2013/04/09/git-config.html">windows下如何配置github ssh 公钥</a></li>
+	　　
+	　　	<li>2013/04/08 <a href="/tech/2013/04/08/git-pages.html">终于搞定git pages</a></li>
+	　　
+　　</div>
+　	<div id='l'>
+	　	
+　	</div>
+</ul>
+
+         <br>
+         字数：1195
+        </section>
+
+        <footer>
+          Miracle Space is maintained by <a href="http://weibo.com/liuhongyuan99">miracle刘</a>(sina weibo)<br>
+          Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
