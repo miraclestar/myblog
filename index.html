@@ -13,18 +13,14 @@ title: Miracle Space
     -->
 <ul>
 　　{% for post in site.posts %}
-　　	
-　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} - by miracle刘</li>
-　　{% endfor %}　</ul>
-
-	{% if post.category == fiction %}
-　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} -{{site.author}}</li>
-	{% endif %}
+　　	{% if post.category == fiction %}
+　　	　　<li> {{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+		{% endif %}
 　　{% endfor %}
 　　<hr>
-　　　{% for post in site.posts %}
-	{% if post.category != fiction %}
-　　　　<li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date_to_string }} -{{site.author}}</li>
-	{% endif %}
+　　{% for post in site.posts %}
+		{% if post.category != fiction %}
+　　　　	<li>{{ post.date | date_to_string }}<a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+		{% endif %}
 　　{% endfor %}
 　</ul>
