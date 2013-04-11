@@ -32,6 +32,7 @@
         <hr>
 
         <section id="main_content">
+         <span class='myprint'>author： miracle刘</span>
          <h2>windows下如何配置github ssh 公钥</h2>
  <div>1. 安装git，从程序目录打开 "Git Bash"&nbsp;</div><div>2. 键入命令：ssh-keygen -t rsa -C "email@email.com"</div>
          <div>&nbsp;&nbsp;"email@email.com"是github账号</div>
@@ -42,11 +43,12 @@
          <div>7. 最后要在git bash里执行下：ssh git@github.com</div><div><br /></div>
          <div>需要注意步骤2中产生的密钥文件在当前用户的根目录，必须把这两个文件放到当前用户目录的&#8220;.ssh&#8221;目录下才能生效。</div>
          <div>在windows中只能在命令行下输入创建"."开头的文件夹。命令为 mkdir .ssh</div>
-         <div>如果还是需要密码push的话，就要看看你的.git/config文件了，这个文件在你代码根目录隐藏的，</div>
+         <div>如果还是需要输入账号密码的话，就要修改你的.git/config文件了，这个文件在你代码根目录，是隐藏的，</div>
          修改	url = git@github.com:【yourname】/【your repo name】.git<br>
 	<div><a href="http://blog.enjoyrails.com/2008/12/31/git%E4%B8%80%E5%88%86%E9%92%9F%E6%95%99%E7%A8%8B/">PS:git 1分钟教程</a></div>
 <p></p>
-<p>09 Apr 2013</p>    
+<p>09 Apr 2013</p> 
+         
         </section>
 
         <footer>
