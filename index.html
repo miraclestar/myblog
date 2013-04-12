@@ -5,32 +5,27 @@ title: Miracle Space
 
 <script type="text/javascript">
 	$(document).ready(function(){ 
-	　　$("#f").hide();
-	　　$("#l").hide();
-	　　$("#t").hide();
-	　}); 
-	function showf(){
-		$("#f").toggle();		
-	}
-	function showl(){
-		$("#l").toggle();
-	}
-	function showt(){
-		$("#t").toggle();
+	　　$(".posts").hide();
+	}); 
+	function showls(lid){
+		$("#lis").html($("#"+lid).html());
 	}
 </script>
 
     <ul id='nav'>
    		<li id='tech'>
-    		<a href="javascript:void(0)" onclick="showt()">	技术文章</a>
+    		<a href="javascript:void(0)" onclick="showls('t')">	技术文章</a>
     	</li>
     	<li id='fiction'>
-    		<a href="javascript:void(0)" onclick="showf()">	随便写写</a>
+    		<a href="javascript:void(0)" onclick="showls('f')">	随便写写</a>
     	</li>
     	<li id='life' >
-    		<a href="javascript:void(0)" onclick="showl()">	生活记录</a>
+    		<a href="javascript:void(0)" onclick="showls('l')">	生活相关</a>
     	</li>    	
     </ul>
+    
+<div id='lis'>	
+</div>
 
 <ul class='posts'>
 	<div id='t'>

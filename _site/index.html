@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
   
-    <script src="/javascripts/jquery-1.9.1.min.js"></script>
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <!--    <link rel = "Shortcut Icon" href="/favicon.ico"/> -->
     <title>Miracle Space</title>
@@ -32,35 +32,29 @@
         <hr>
 
         <section id="main_content">
-         <span class='myprint'>author： miracle刘</span>
-         <script type="text/javascript">
+       <script type="text/javascript">
 	$(document).ready(function(){ 
-	　　$("#f").hide();
-	　　$("#l").hide();
-	　　$("#t").hide();
-	　}); 
-	function showf(){
-		$("#f").toggle();		
-	}
-	function showl(){
-		$("#l").toggle();
-	}
-	function showt(){
-		$("#t").toggle();
+	　　$(".posts").hide();
+	}); 
+	function showls(lid){
+		$("#lis").html($("#"+lid).html());
 	}
 </script>
 
     <ul id='nav'>
    		<li id='tech'>
-    		<a href="javascript:void(0)" onclick="showt()">	技术文章</a>
+    		<a href="javascript:void(0)" onclick="showls('t')">	技术文章</a>
     	</li>
     	<li id='fiction'>
-    		<a href="javascript:void(0)" onclick="showf()">	随便写写</a>
+    		<a href="javascript:void(0)" onclick="showls('f')">	随便写写</a>
     	</li>
     	<li id='life' >
-    		<a href="javascript:void(0)" onclick="showl()">	生活记录</a>
+    		<a href="javascript:void(0)" onclick="showls('l')">	生活相关</a>
     	</li>    	
     </ul>
+    
+<div id='lis'>	
+</div>
 
 <ul class='posts'>
 	<div id='t'>
@@ -80,10 +74,14 @@
 
 　	<div id='l'>
 	　	
+	　　	<li>2013/04/11 <a href="/life/2013/04/11/life2.html">关于工资</a></li>
+	　　
+	　　	<li>2013/04/11 <a href="/life/2013/04/11/life.html">什么是恐惧，为什么会恐惧</a></li>
+	　　
 　	</div>
 </ul>
  
-         
+          <span class='myprint' style="color:white">author： miracle刘</span> 
         </section>
 
         <footer>
@@ -96,3 +94,13 @@
     </div>
   </body>
 </html>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40065204-1', 'xmark.info');
+  ga('send', 'pageview');
+
+</script>
