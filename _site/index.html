@@ -32,7 +32,17 @@
         <hr>
 
         <section id="main_content">
-       <script type="text/javascript">
+       <style>
+.nav ul {list-style-type:none;}
+
+.nav li 
+{
+ float:left;
+ line-height:30px;
+ margin:5px;
+}
+</style>
+<script type="text/javascript">
 	$(document).ready(function(){ 
 	　　$(".posts").hide();
 	}); 
@@ -40,8 +50,7 @@
 		$("#lis").html($("#"+lid).html());
 	}
 </script>
-
-    <ul id='nav'>
+    <ul class='nav'>
    		<li id='tech'>
     		<a href="javascript:void(0)" onclick="showls('t')">	技术文章</a>
     	</li>
@@ -52,6 +61,9 @@
     		<a href="javascript:void(0)" onclick="showls('l')">	生活相关</a>
     	</li>    	
     </ul>
+    <br>
+    <hr>
+   
     
 <div id='lis'>	
 </div>
@@ -74,6 +86,8 @@
 
 　	<div id='l'>
 	　	
+	　　	<li>2013/04/12 <a href="/life/2013/04/12/barbecue-tomorrow.html">明儿去烧烤</a></li>
+	　　
 	　　	<li>2013/04/11 <a href="/life/2013/04/11/life2.html">关于工资</a></li>
 	　　
 	　　	<li>2013/04/11 <a href="/life/2013/04/11/life.html">什么是恐惧，为什么会恐惧</a></li>
