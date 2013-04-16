@@ -14,6 +14,7 @@ title: Miracle Space
 <script type="text/javascript">
 	$(document).ready(function(){ 
 	　　$(".posts").hide();
+	　　
 	}); 
 	function showls(lid){
 		$("#lis").html($("#"+lid).html());
@@ -41,16 +42,7 @@ title: Miracle Space
 <img src="/images/mlxy/4.JPG"><br>
 </div>
 
-<div id="me">
-	<div itemscope itemtype="http://data-vocabulary.org/Person">
-	  我的名字是 <span itemprop="name">刘洪源</span> 
-	  我的主页是：
-	  <a href="http://blog.xmark.info" itemprop="url">http://blog.xmark.info/</a>
-	  我在上海市。我是<span itemprop="title">工程师</span>
-	  目前在<span itemprop="affiliation">土豆网</span>上班。
-	  <img src="http://service.t.sina.com.cn/widget/qmd/1768291940/1848e47b/4.png">
-	</div>	
-</div>
+
 <ul class='posts'>
 	<div id='t'>
 	　	{% for post in site.categories.tech %}
@@ -68,4 +60,14 @@ title: Miracle Space
 	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 	　　{% endfor %}
 　	</div>
+　	<div id="me">
+	<div itemscope itemtype="http://data-vocabulary.org/Person">
+	  我的名字是 <span itemprop="name">刘洪源</span> <br>
+	  我的主页是：
+	  <a href="http://blog.xmark.info" itemprop="url">http://blog.xmark.info</a><br>
+	  我在上海市。我是<span itemprop="title">工程师</span><br>
+	  目前在<span itemprop="affiliation">土豆网</span>上班。
+	  <img src="http://service.t.sina.com.cn/widget/qmd/1768291940/1848e47b/4.png">
+	</div>	
+</div>
 </ul>
