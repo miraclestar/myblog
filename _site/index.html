@@ -10,6 +10,19 @@
   
      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40174365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 <!--    <link rel = "Shortcut Icon" href="/favicon.ico"/> -->
     <title>Miracle Space</title>
   </head>
@@ -44,6 +57,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 	　　$(".posts").hide();
+	　　
 	}); 
 	function showls(lid){
 		$("#lis").html($("#"+lid).html());
@@ -58,7 +72,10 @@
     	</li>
     	<li id='life' >
     		<a href="javascript:void(0)" onclick="showls('l')">	生活相关</a>
-    	</li>    	
+    	</li>    
+    	<li id='life' >
+    		<a href="javascript:void(0)" onclick="showls('me')">about me</a>
+    	</li>   	
     </ul>
     <br>
     <hr>
@@ -68,9 +85,14 @@
 <img src="/images/mlxy/4.JPG"><br>
 </div>
 
+
 <ul class='posts'>
 	<div id='t'>
 	　	
+	　　	<li>2013/04/16 <a href="/tech/2013/04/16/java-double.html">java的double输出</a></li>
+	　　
+	　　	<li>2013/04/16 <a href="/tech/2013/04/16/cloud-platform.html">免费空间--我用过云平台介绍</a></li>
+	　　
 	　　	<li>2013/04/11 <a href="/tech/2013/04/11/local-jekyll-config.html">本地jekyll环境配置</a></li>
 	　　
 	　　	<li>2013/04/09 <a href="/tech/2013/04/09/git-config.html">windows下如何配置github ssh 公钥</a></li>
@@ -80,24 +102,38 @@
 　　</div>
 	<div id='f'>
 		
+	　　	<li>2013/04/12 <a href="/fiction/2013/04/12/fo-science.html">科学与佛教汇合之处</a></li>
+	　　
+	　　	<li>2013/04/11 <a href="/fiction/2013/04/11/fear.html">什么是恐惧，为什么会恐惧</a></li>
+	　　
 	　　	<li>2013/04/10 <a href="/fiction/2013/04/10/fiction.html">随笔写点东西</a></li>
 	　　
 	</div>	
 
 　	<div id='l'>
 	　	
+	　　	<li>2013/04/13 <a href="/life/2013/04/13/barbecue.html">顾村公园烧烤</a></li>
+	　　
 	　　	<li>2013/04/12 <a href="/life/2013/04/12/malaixy.html">秀一下马来西亚的照片</a></li>
 	　　
-	　　	<li>2013/04/11 <a href="/life/2013/04/11/life2.html">关于工资</a></li>
-	　　
-	　　	<li>2013/04/11 <a href="/life/2013/04/11/life.html">什么是恐惧，为什么会恐惧</a></li>
+	　　	<li>2013/04/11 <a href="/life/2013/04/11/salary.html">关于工资</a></li>
 	　　
 　	</div>
+　	<div id="me">
+	<div itemscope itemtype="http://data-vocabulary.org/Person">
+	  我的名字是 <span itemprop="name">刘洪源</span> <br>
+	  我的主页是：
+	  <a href="http://blog.xmark.info" itemprop="url">http://blog.xmark.info</a><br>
+	  我在上海市。我是<span itemprop="title">工程师</span><br>
+	  目前在<span itemprop="affiliation">土豆网</span>上班。<br>
+	  <a href="http://weibo.com/u/1768291940?s=6uyXnP" target="_blank"><img border="0" src="http://service.t.sina.com.cn/widget/qmd/1768291940/1848e47b/4.png"/></a>
+	</div>	
+</div>
 </ul>
  
           <span class='myprint' style="color:white">author： miracle刘</span> 
         </section>
-
+        
         <footer>
           Miracle Space is maintained by <a href="http://weibo.com/liuhongyuan99">miracle刘(sina weibo)</a>,<a href="https://github.com/miraclestar/myblog"> miraclestar(github)</a>.<br>
           Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
@@ -108,13 +144,3 @@
     </div>
   </body>
 </html>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-40065204-1', 'xmark.info');
-  ga('send', 'pageview');
-
-</script>
