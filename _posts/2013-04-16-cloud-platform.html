@@ -16,10 +16,10 @@ category: tech
 
 appfog是一个网友用的，他用了几天就不用了，说是服务不稳定。简单介绍下吧：
 <br>
-
+<br>
 一、新浪SAE ：http://sae.sina.com.cn/<br>
 
-支持的语言，php，java，python；
+支持的语言，php，java，python；<br>
 
 新浪SAE，需要用云豆（虚拟货币，100豆=1元），刚开始送500豆，如果用php可能够用几十天。但是用java的话，也就只能用几天。
 
@@ -30,15 +30,15 @@ appfog是一个网友用的，他用了几天就不用了，说是服务不稳�
 
 java只要上传个war包就可以了。具体的就不再细说，看文档吧。
 
-因为我申请了之后一直都没怎么用，于是云豆耗光了。。。
+因为我申请了之后一直都没怎么用，于是云豆耗光了。。。<br>
 
 
 可以使用自己的域名，不过必须是备案过的。
-
+<br>
 <br>
 二、cloud foundry（http://www.cloudfoundry.com）和 appfog(https://www.appfog.com/)<br>
 
-支持语言java，ruby,nodjs,等等，参考文档http://docs.cloudfoundry.com/getting-started.html
+支持语言java，ruby,nodjs,等等，参考文档<a href="http://docs.cloudfoundry.com/getting-started.html">http://docs.cloudfoundry.com/getting-started.html</a><br>
 
 
 这俩一起说说吧，这俩都是完全免费的！是国外的网站，不过在国内都可以直接访问。
@@ -49,36 +49,37 @@ cloud foundry有中文网页，看不懂E文的可以看中文。
 
 建议安装eclipse的插件，装上插件可以直接发布到网上，很方便。
 
-部署到上面的网站访问速度很快。
+部署到上面的网站访问速度很快。<br>
 
 
-appfog不清楚，cloudfoundry是不能使用自己的域名的！！这点比较恶。。于是转战到openshift
+appfog不清楚，cloudfoundry是不能使用自己的域名的！！这点比较恶。。于是转战到openshift<br>
 <br>
 
 三、openshift（openshift.redhat.com）<br>
 
-支持java，ruby，python，nodejs，php/perl
+支持java，ruby，python，nodejs，php/perl<br>
 
-红帽搞的，可以ssh到机器上看自己的文件，你也可以自己装个tomcat部署自己的程序。自由度很高。也可以用自己的域名，不用备案。
+红帽搞的，可以ssh到机器上看自己的文件，你也可以自己装个tomcat部署自己的程序。自由度很高。也可以用自己的域名，不用备案。<br>
 
-我ssh到远程机器上，发现他用的也是亚马逊的云服务器，ssh很不稳定，偶尔能连上，翻墙后成功率很高！搞得我很崩溃，都有移民的冲动了。
-
-
-不过它有个很恶心的bug，让我很抓狂，不支持commons-httpclient.jar！只能用httpcomponent下的httpclient包。
-
-新浪微博的sdk，是用了commons-httpclient。。。于是部署会报错！！！
+我ssh到远程机器上，发现他用的也是亚马逊的云服务器，ssh很不稳定，偶尔能连上，翻墙后成功率很高！搞得我很崩溃，都有移民的冲动了。<br>
 
 
-另外openshift是用maven+git部署和管理程序，git连接很不稳定。你懂的！openshift还在摸索中前进，虽然ssh、git都比较慢，但部署在上面的网站访问还是很快的。最近也不行了，访问速度赶不上cloudfoundry。
+不过它有个很恶心的bug，让我很抓狂，不支持commons-httpclient.jar！只能用httpcomponent下的httpclient包。<br>
+
+新浪微博的sdk，是用了commons-httpclient。。。于是部署会报错！！！<br>
 
 
-最后，除了我说的这些，还有GAE（墙外google的），亚马逊的AWS，BAE（百度），前两个是限量免费，BAE现在不用邀请码了，支持java和python。
+另外openshift是用maven+git部署和管理程序，git连接很不稳定。你懂的！<br>
+openshift还在摸索中前进，部署在上面的网站访问速度最近也不行了，访问速度赶不上cloudfoundry。<br>
 
 
-近一个月业余时间都花在这里了。。。总结两个字：fuck GFW
+最后，除了我说的这些，还有GAE（墙外google的），亚马逊的AWS，BAE（百度），前两个是限量免费，BAE现在不用邀请码了，支持java和python。<br>
 
 
-如果不绑定自己的域名，cloudfoundry是首选，连接稳定，插件方便，嗯。
+近一个月业余时间都花在这里了。。。总结两个字：fuck GFW<br>
+
+
+如果不绑定自己的域名，cloudfoundry是首选，连接稳定，插件方便，嗯。<br>
 
 
 </p>
