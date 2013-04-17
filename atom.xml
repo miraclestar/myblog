@@ -3,8 +3,7 @@ layout: nil
 title : Atom Feed
 ---
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
- 
+<feed xmlns="http://www.w3.org/2005/Atom"> 
  <title>miracle space</title>
  <link href="{{ site.production_url }}/{{ site.atom_path }}" rel="self"/>
  <link href="{{ site.production_url }}"/>
