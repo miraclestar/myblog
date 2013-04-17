@@ -8,7 +8,7 @@ title : Atom Feed
  <link href="{{ site.production_url }}/{{ site.atom_path }}" rel="self"/>
  <link href="{{ site.production_url }}"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>{{ site.production_url }}</id>
+ <id>{{ site.production_url }}/</id>
  <author>
    <name>miracle 刘</name>
    <email>liuhongyuan99@gmail.com</email>
