@@ -11,6 +11,27 @@ category: tech
  	DecimalFormat decimalFormat = new DecimalFormat("###0");
  	decimalFormat.format(doubleValue);
  	{% endhighlight%} 	
+ 	ok，开始以为这就完了。<br>
+ 	
+ 	{% highlight java %}
+ 	DecimalFormat decimalFormat = new DecimalFormat("#");
+	double a = 136539161462716274890d;
+	System.out.println(a);
+	System.out.println(decimalFormat.format(a));
+ 	{% endhighlight%} 	
+ 	猜猜这个输出是什么？如下<br>
+ 	{% highlight java %}
+	1.3653916146271627E20
+	136539161462716270000
+ 	{% endhighlight%} 	
+ 	默认输出了科学计数法表示的。后面format一下，输出的后面四位又都是0！<br>
+ 	这是整我呢吗！网上搜了下，说double类型的有效数字是15~16位，恍惚中好像哪本书上有介绍过。<br>
+ 	好吧，那就用bigDecimal来表示精确的数字,	于是重新定义为BigDecimal:<br>
+ 	{% highlight java %}
+ 		BigDecimal b = new BigDecimal("136539161462716274890");
+ 	{% endhighlight%} 
+ 	这个是用字符串初始化的，如果用BigDecimal(double d)来初始化也会悲剧。和原来的值也是不一样的,因为double的有效位数的问题<br>
+ 	
  	这还算是小事情，java的time那才是真的乱七八糟，让人不忍直视！网上各种吐槽我就不一一列举了。
  	据说java8会对time进行改进，期待吧。<br>
  	
