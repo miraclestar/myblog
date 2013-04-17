@@ -1,0 +1,45 @@
+---
+layout: default
+title: jekyll整合评论和rss订阅
+category: tech
+tags: [jekyll, gitpages, rss]
+---
+<h2>{{ page.title }}</h2>
+<hr>
+<p>
+	每次都上传到github看效果,太麻烦，于是在本地搭建个环境。<br>
+	安装步骤：<a href="https://github.com/mojombo/jekyll/wiki/Install">https://github.com/mojombo/jekyll/wiki/Install</a><br>
+	上面的文档说了很多其他系统的配置，我是win下安装的，<br>
+	说下我的安装过程:<br>
+	<ol>
+	<li>
+	先下载RubyInstaller 1.9.2和DevKit 4.5.2（<a href="http://rubyinstaller.org/downloads/">下载地址</a>）<br>
+	安装ruby，解压devkit，注意目录不能有空格！
+	</li>
+	<li>
+	然后，命令行，cd 到devkit目录执行 : <strong>ruby dk.rb init</strong> 这一步生成了config.yml文件,打开这个文件，除了注释应该有如下两行
+{% highlight java%}
+--- 
+- d:/Ruby192
+{% endhighlight %}
+第二行是ruby的目录，如果没有，自己加上。
+	</li>
+	<li>
+	next，可选步骤，执行<strong>ruby dk.rb review</strong> 这一步就是看看是不是找到ruby了。
+	</li>
+	<li>
+	接着，执行<strong>ruby dk.rb install</strong>,没有error的话 devkit就装好了。
+	</li>
+	<li>
+	好了，开始装jekyll，这个直接命令行执行<strong>gem install jekyll</strong> 可以看<a href="https://github.com/mojombo/jekyll/wiki/Install">这里</a>,其他的乱七八糟的我没装
+	</li>
+	<li>
+		最后在你的blog根目录执行<strong>jekyll --server --auto</strong>就可以了
+	</li>
+</ol>
+	中间当然会碰到问题，<a href="http://chxt6896.github.io/blog/2012/02/13/blog-jekyll-native.html">这个博客</a>也许能找到答案。<br>
+	另外，本地对中文的文件名也识别不出。<br>
+浏览器显示的错误如果是：ERROR no access permission to `/' 那就是你的post的YAML写的不对，解决办法：仔细检查_post，把_post目录中有关文件的YAML格式改为：参数＋：＋空格+参数值。
+	
+</p>
+<p>{{ page.date | date_to_string }}</p>
