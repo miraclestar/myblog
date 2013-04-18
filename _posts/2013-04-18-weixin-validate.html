@@ -83,14 +83,15 @@ public class Validate extends HttpServlet {
 			String toUsername = root.elementText("ToUserName");
 			String keyword = root.elementTextTrim("Content");
 			String time = new Date().getTime() + "";
-			String textTpl = "<xml>" + "<ToUserName><![CDATA[%1$s]]></ToUserName>" + "<FromUserName><![CDATA[%2$s]]></FromUserName>"
-					+ "<CreateTime>%3$s</CreateTime>" + "<MsgType><![CDATA[%4$s]]></MsgType>" + "<Content><![CDATA[%5$s]]></Content>"
-					+ "<FuncFlag>0</FuncFlag>" + "</xml>";
+			
 			System.out.println("fromUser: " + fromUsername + ", toUser: " + toUsername);
 			if (null != keyword && !keyword.equals("")) {
+				String template = "<xml>" + "<ToUserName><![CDATA[%1$s]]></ToUserName>" + "<FromUserName><![CDATA[%2$s]]></FromUserName>"
+					+ "<CreateTime>%3$s</CreateTime>" + "<MsgType><![CDATA[%4$s]]></MsgType>" + "<Content><![CDATA[%5$s]]></Content>"
+					+ "<FuncFlag>0</FuncFlag>" + "</xml>";
 				String msgType = "text";
 				String contentStr = "Welcome to wechat world!";
-				String resultStr = textTpl.format(textTpl, fromUsername, toUsername, time, msgType, contentStr);
+				String resultStr = String.format(template, fromUsername, toUsername, time, msgType, contentStr);
 				out.print(resultStr);
 				System.out.println("resultStr: " + resultStr);
 			} else {
