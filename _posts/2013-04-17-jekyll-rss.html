@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 【git pages】jekyll整合评论,rss订阅,robots设置
+title: 【git pages】jekyll整合评论,rss订阅,robots设置,sitemap
 category: tech
-tags: [jekyll, gitpages, rss]
+tags: [jekyll, gitpages, rss,sitemap,robots]
 ---
 <h2>{{ page.title }}</h2>
 <hr>
@@ -18,6 +18,41 @@ tags: [jekyll, gitpages, rss]
 	评论，我用的是<a href="http://dev.duoshuo.com/">多说</a>，去多说主页，申请个账号，然后会给你一段通用js代码，
 	把这段代码放在博客页面就ok了。<br>
 	当然还有其他的评论，disqus，很多用这个评论的，因为国内的社交网络支持不多，我还是选择多说。<br>
-	
+	<Stong>Update 2013.4.18:	</Strong><br>
+	robots.txt（统一小写）是一种存放于网站根目录下的ASCII编码的文本文件，它通常告诉网络搜索引擎的漫游器（又称网络蜘蛛），此网站中的哪些内容是不应被搜索引擎的漫游器获取的，哪些是可以被（漫游器）获取的。<br>
+	看<a href="https://zh.wikipedia.org/wiki/Robots.txt#.E8.87.AA.E5.8A.A8.E5.8F.91.E7.8E.B0Sitemaps.E6.96.87.E4.BB.B6">维基百科</a><br>
+	我的robots.txt:<br>
+	{% highlight shell %}
+	User-agent: *
+	Disallow: /images/
+	Disallow: /life/
+	Disallow: /stylesheets/
+	Sitemap: <http://blog.xmark.info/sitemap.xml>
+	{%	endhighlight %}
+	<br>
+	sitemap，搜了一篇<a href="http://vvv.tobiassjosten.net/jekyll/jekyll-sitemap-without-plugins/">文章</a>,直接用jekyll的脚本就可以生成了。
+	我的sitemap.xml:
+	{% highlight shell %}
+---
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for post in site.posts %}
+    <url>
+        <loc>http://blog.xmark.info{{ post.url | remove: 'index.html' }}</loc>
+    </url>
+    {% endfor %}
+
+    {% for page in site.pages %}
+    {% if page.layout != nil %}
+    {% if page.layout != 'feed' %}
+    <url>
+        <loc>http://blog.xmark.info{{ page.url | remove: 'index.html' }}</loc>
+    </url>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</urlset>
+	{%	endhighlight %}
 </p>
 <p>{{ page.date | date_to_string }}</p>
