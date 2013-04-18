@@ -1,0 +1,15 @@
+---
+layout: default
+title: jekyll不生成_site文件了
+category: tech
+tags: [jekyll, gitpages, site, title]
+---
+<h2>{{ page.title }}</h2>
+<hr>
+<p>
+	今天提交的页面突然不更新了？就是说github下的代码和页面的显示不一致了。
+	我在本地jekyll试了一把，发现_site目录下居然不生成文件了！<br>
+	这可搞死我了，找了一下午原因，搜到的一个<a href="http://stackoverflow.com/questions/15131526/page-build-failed-when-pushing-a-new-blog-post-to-github">stackoverflow的说法</a>，tilte里不能有这些字符"[]【】<>《》"
+	不知道title里还有啥限制，有人知道的给我留言呀<br>
+</p>
+<p>{{ page.date | date_to_string }}</p>
