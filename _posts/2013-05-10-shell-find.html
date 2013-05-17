@@ -1,0 +1,27 @@
+---
+layout: default
+title: 用shell做统计
+category: tech
+---
+<h2>{{ page.title }}</h2>
+ <p>
+<br /> 	接到任务，从一大堆日志里统计出，包含某个特定字符串的行，占总行数的比例；
+<br /> 	这一大堆日志，分布在各个不同名字命名的目录下，唯一的共同点就是都是.bz2文件,
+<br /> 	于是：find命令派上用场
+<br /> 	
+<br /> 	{% highlight java %}
+<br /> 	##找出所有的.bz2结尾的文件
+<br /> 	filelist=`find /home/abc/cbxx/ -maxdepth 3|grep .bz2`
+<br /> 	##写个循环读取就搞定了
+<br /> 	for f in $fl
+<br />	do
+<br />		temp=`bzcat $f |grep "special"|wc -l `;
+<br />        temp2=`bzcat $f|wc -l`##这里读了2遍文件，如果能只读一遍就更好了: )
+<br />        total=temp2+total;
+<br />        i=temp+i;
+<br />	done
+<br />	echo i/total*100|bc
+<br /> 	{% endhighlight %}
+
+ 	</p>
+<p>{{ page.date | date_to_string }}</p>
