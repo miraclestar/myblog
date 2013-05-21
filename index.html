@@ -49,18 +49,18 @@ title: Miracle Space
 <ul class='posts'>
 	<div id='t'>
 	　	{% for post in site.categories.tech %}
-	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.production_url }}{{ post.url }}">{{ post.title }}</a></li>
 	　　{% endfor %}
 　　</div>
 	<div id='f'>
 		{% for post in site.categories.fiction %}
-	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.production_url }}{{ post.url }}">{{ post.title }}</a></li>
 	　　{% endfor %}
 	</div>	
 
 　	<div id='l'>
 	　	{% for post in site.categories.life %}
-	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+	　　	<li>{{ post.date |  date: "%Y/%m/%d" }} <a href="{{ site.production_url }}{{ post.url }}">{{ post.title }}</a></li>
 	　　{% endfor %}
 　	</div>
 　	<div id="me">
