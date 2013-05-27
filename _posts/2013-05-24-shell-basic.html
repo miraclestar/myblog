@@ -1,0 +1,25 @@
+---
+layout: default
+title: shell脚本-变量相加
+category: tech
+---
+<h2>{{ page.title }}</h2>
+ <p>
+
+shell的默认赋值是字符串赋值。比如：
+  	{% highlight java %}
+  	var=1
+   var=$var+1
+   echo $var
+   {% endhighlight %}
+打印出来的不是2而是1＋1。为了达到我们想要的效果有以下几种表达方式：
+{% highlight java %}
+   let "var+=1"
+   var=$[$var+1]    
+   var=`expr $var + 1`#注意加号两边的空格，否则还是按照字符串的方式赋值。
+   {% endhighlight %}
+注意：前两种方式在bash下有效，在sh下会出错。
+
+let表示数学运算，expr用于整数值运算，每一项用空格隔开，$[]将中括号内的表达式作为数学运算先计算结果再输出。
+ 	</p>
+<p>{{ page.date | date_to_string }}</p>
