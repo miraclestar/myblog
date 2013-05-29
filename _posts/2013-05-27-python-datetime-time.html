@@ -1,0 +1,38 @@
+---
+layout: default
+title: python的一些程序片段
+category: tech
+---
+<h2>{{ page.title }}</h2>
+ <p>
+ 
+ 	datetime转换为time，吐槽下，为啥非要搞这么麻烦，就用一个不就好了吗？eggache
+ 	{% highlight python %}
+	yestoday=datetime.datetime.now() - datetime.timedelta(days=1)
+    dir1=str(time.strftime("%Y%m",yestoday.timetuple()))
+     {% endhighlight %}
+     
+    python遍历文件夹：
+     <a href="http://laocao.blog.51cto.com/480714/525140">http://laocao.blog.51cto.com/480714/525140</a>
+ {% highlight python %}
+import os 
+def Test1(rootDir): 
+    list_dirs = os.walk(rootDir) 
+    for root, dirs, files in list_dirs: 
+        for d in dirs: 
+            print os.path.join(root, d)      
+        for f in files: 
+            print os.path.join(root, f) 
+
+# -*- coding: utf-8 -*- 
+import os 
+def Test2(rootDir): 
+    for lists in os.listdir(rootDir): 
+        path = os.path.join(rootDir, lists) 
+        print path 
+        if os.path.isdir(path): 
+            Test2(path) 
+    {% endhighlight %}
+     
+</p>
+<p>{{ page.date | date_to_string }}</p>

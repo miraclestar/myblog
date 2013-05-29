@@ -1,0 +1,157 @@
+---
+layout: default
+title: python的多线程
+category: tech
+---
+<h2>{{ page.title }}</h2>
+ <p>
+<br /> 花了一下午把之前写的python程序改成多线程，结果执行速度反而慢了。。。
+<br /> 先说说程序干啥的吧，这个程序是读取文件并且做解析的，文件数很多，大约32w个文件。每个文件要读一遍然后解析出里面的数据，再按格式输出。
+<br /> 每个文件倒是不太大，就几十K到几M不等。
+<br /> 写完之后，我用了300个文件做测试，多线程版本用时95s，原来的单线程版本只用70s。我顿时就晕了。怎么多线程反而慢了？
+<br /> 我调整了线程数，从3个到20个，最后发现10个线程是最快的，用时85s，也比单线程慢了很多。纠结了。
+<br /> 于是和网友讨论了下，为什么会出现这样的情况？
+<br /> 鬼精灵："一个线程读文件的时候 可以认为是连续的读 多线程多文件 没线程都需要去 改变磁头位置 去读不通的文件 每个线程都改变磁头位置，所以会慢。
+<br /> 		你的程序 cpu 时间太短  所以没办法弥补多线程损失的时间"
+<br />这个解释靠谱，应该就是这个问题。
+<br />然后他给了一个方案做优化：
+<br />第一步, 1个线程读 只读不处理 多个线程处理
+<br />第二步  不要用 读字符串的方式读 用字节去读 吧自己读进来以后 在内存里转换成 字符
+<br />没空做了，就先这样吧；
+<br />
+另外附上这个花了一下午时间写的代码：
+ {% highlight python %}
+#!/usr/bin/python python
+# coding=utf8
+'''
+    output:ip STRING    tm int    playtype int    tk STRING    brt int    itemid bigint    fi bigint    sz int    si STRING    inf int        sid int    ispid int dt int node STRING
+    @liuhongyuan
+'''
+import threading
+from urllib import unquote
+import commands
+import traceback
+import bz2
+import sys
+import os
+import time
+import datetime
+
+
+logpath='/home/liuhongyuan/'
+outpath='/home/liuhongyuan/'
+
+def getparam(params,dict={}):
+    ret=''
+    dli=params.find('?')
+    p2=params[dli+1:]
+    values=p2.split('&')
+    for v in values:
+        try:
+            val=v.split('=')
+            if len(val)>1:
+                dict[val[0]]=val[1]
+        except:
+            print '[error]'+traceback.format_exc()
+            continue
+    return dict
+pass
+
+def timechange(t):
+    try:
+        t=t.replace('[','')
+        t=time.strptime(t,"%d/%b/%Y:%H:%M:%S")
+        t=time.strftime("%Y%m%d\t%H%M%S",t)
+        dt=t.split('\t')[0]
+        tm=t.split('\t')[1]
+        return dt,tm
+    except:
+        print '[error]'+traceback.format_exc()
+        return '',''
+pass
+
+def proc(threadnum,list):
+    list_len=len(list)
+    print "thread NO %d ,start time %s list %s"%(threadnum,datetime.datetime.now(),len(list))
+    st=time.time()
+    wlog=open(outpath+"temp/test"+str(threadnum),'a')
+    for i in range(list_len):
+        orilog=list[i]
+#        print "orilog---",orilog
+#        fname=orilog.split('/')
+#        dir=outpath+fname[5]
+#        if os.path.exists(dir)==False:
+#            os.mkdir(dir)
+#        outfile=dir+'/'+filter(str.isalpha,fname[7].split('-')[0])
+        olog=bz2.BZ2File(orilog,'r')
+        print 'bzlog------->'+str(orilog)
+#        print 'outlog------>'+str(outfile)
+        ii=0
+#        wlog=open(outfile,'a')
+        while True:
+            try:
+                line=olog.readline()
+                if not line:
+                    break
+                params=line.split(' ')
+                when=params[3]
+                dt,tm=timechange(when)
+                buf=params[0]+'\t'+tm
+                file=unquote(getparam(params[7])['file'])
+                initdic={'playtype':'','tk':'','brt':'','itemid':'','fi':'','sz':'','ispid':'','si':'','sid':'','inf':''}
+                filep=getparam(file,initdic)
+                buf=buf+'\t'+filep['playtype']+'\t'+filep['tk']+"\t"+filep['brt']+"\t"+filep['itemid']+"\t"+filep['fi']+"\t"+filep['sz']+"\t"+filep['si']+"\t"+filep['inf']+"\t"+filep['sid']+"\t"+filep['ispid']+'\n'
+                wlog.write(buf)
+                ii=ii+1
+            except EOFError:
+                break
+            except:
+                print '[error]'+traceback.format_exc()
+        print 'total line: '+str(ii)
+        olog.close()
+    wlog.close()
+    print "thread NO %d ,end time %s "%(threadnum,(time.time()-st))
+
+if __name__ == "__main__":
+    start=time.time()
+    print datetime.datetime.now()
+    yestoday=datetime.datetime.now() - datetime.timedelta(days=1)
+    dir1=str(time.strftime("%Y%m",yestoday.timetuple()))
+    dir2=str(time.strftime("%Y%m%d",yestoday.timetuple()))
+    list_dirs = os.walk(logpath+dir1+"/"+dir2+"/")
+    lnum=0
+    file_list=[]
+    for root,dirs,files in list_dirs:
+        print len(files),type(files)
+	for  f in files:    
+		file_list.append(os.path.join(root, f))
+
+    threads=[]
+    threads_num=1   #线程数 在此处修改下线程数就可以比较多线程与单线程处理文件的速度差异
+    print '共有线程数:%d个'%threads_num
+    per_thread=len(files)/threads_num  #每个线程处理的文本数量
+    print per_thread
+    for i in range(threads_num):
+        if threads_num-i==1:    #最后一个线程，分担余下的所有工作量
+            t=threading.Thread(target=proc,args=(i,file_list[i*per_thread:]))
+        else:
+            t=threading.Thread(target=proc,args=(i,file_list[i*per_thread:i*per_thread+per_thread]))
+        threads.append(t)
+    for i in range(threads_num):
+        threads[i].start()
+    for i in range(threads_num):#等待所有的线程结束
+        threads[i].join()
+       
+    print datetime.datetime.now()
+    scpcmd="scp -P22022 -r %s is@10.106.23.164:/home/is/lhy/tdmsdlog/" % (os.path.join(outpath,dir2)+"/")
+    print scpcmd
+    #scpres=commands.getoutput(scpcmd)
+    #print "scp result: "+scpres
+    endwrite=time.time()
+    print datetime.datetime.now()
+    print "execute time : %s s" % (endwrite-start)
+
+ {% endhighlight %}
+     
+</p>
+<p>{{ page.date | date_to_string }}</p>

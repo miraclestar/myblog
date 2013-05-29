@@ -23,5 +23,27 @@ category: tech
 <br />	echo i/total*100|bc
 <br /> 	{% endhighlight %}
 
- 	</p>
+update：20130528
+最近在用python，于是找了python看了看，也不错，呵呵
+<a href="http://laocao.blog.51cto.com/480714/525140">http://laocao.blog.51cto.com/480714/525140</a>
+ {% highlight python %}
+import os 
+def Test1(rootDir): 
+    list_dirs = os.walk(rootDir) 
+    for root, dirs, files in list_dirs: 
+        for d in dirs: 
+            print os.path.join(root, d)      
+        for f in files: 
+            print os.path.join(root, f) 
+
+# -*- coding: utf-8 -*- 
+import os 
+def Test2(rootDir): 
+    for lists in os.listdir(rootDir): 
+        path = os.path.join(rootDir, lists) 
+        print path 
+        if os.path.isdir(path): 
+            Test2(path) 
+    {% endhighlight %}
+</p>
 <p>{{ page.date | date_to_string }}</p>
