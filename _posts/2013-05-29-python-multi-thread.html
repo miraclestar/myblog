@@ -143,10 +143,7 @@ if __name__ == "__main__":
         threads[i].join()
        
     print datetime.datetime.now()
-    scpcmd="scp -P22022 -r %s is@10.106.23.164:/home/is/lhy/tdmsdlog/" % (os.path.join(outpath,dir2)+"/")
-    print scpcmd
-    #scpres=commands.getoutput(scpcmd)
-    #print "scp result: "+scpres
+   
     endwrite=time.time()
     print datetime.datetime.now()
     print "execute time : %s s" % (endwrite-start)
