@@ -7,29 +7,80 @@ category: tech
  <p>
 <br />http://www.evanmiller.org/statistical-formulas-for-programmers.html
 <br />有空翻一下这篇文章。嗯,先来开头的一段吧
-<br />Statistical Formulas For Programmers
+<!-- <br />Statistical Formulas For Programmers -->
 <br />程序员应该了解的统计学公式
 <br />By Evan Miller
 <br />
-<br />DRAFT: May 19, 2013
+<!-- <br />DRAFT: May 19, 2013 -->
 <br />2013年5月19日
-<br />Being able to apply statistics is like having a secret superpower.
-<br />能够使用统计知识就像是拥有了一个神秘的超能力一样。
-<br />Where most people see averages, you see confidence intervals.
+<!-- <br />Being able to apply statistics is like having a secret superpower.
+ --><br />能够使用统计知识就像是拥有了一个神秘的超能力一样。
+<!-- <br />Where most people see averages, you see confidence intervals. -->
 <br />当大多数人只知道看平均数的时候，你却能使用置信区间。
-<br />When someone says “7 is greater than 5,” you declare that they're really the same.
+<!-- <br />When someone says “7 is greater than 5,” you declare that they're really the same. -->
 <br />当一些人说‘7大于5’，你会告诉他们其实本质上是一样。
-<br />In a cacophony of noise, you hear a cry for help.
+<!-- <br />In a cacophony of noise, you hear a cry for help. -->
 <br />像超人一样在繁杂刺耳的噪声中，听到求救的呼声。
-<br />
-<br />Unfortunately, not enough programmers have this superpower. That's a shame, because the application of statistics can almost always enhance the display and interpretation of data.
-<br />遗憾的是，不是所有的程序员都有这项超能力。你应该感到羞愧，因为统计知识的应用总是能够加强展示效果，并且能很好的解释数据的意义。
-<br />As my modest contribution to developer-kind, I've collected together the statistical formulas that I find to be most useful; this page presents them all in one place, a sort of statistical cheat-sheet for the practicing programmer.
-<br />我收集了一些自认为最有用的统计公式，就当是给程序员们的一点贡献。这一页中集中展示了所有的统计公式，给所有的实践中的程序员做个小抄。
-<br />Most of these formulas can be found in Wikipedia, but others are buried in journal articles or in professors' web pages. They are all classical (not Bayesian), and to motivate them I have added concise commentary. I've also added links and references, so that even if you're unfamiliar with the underlying concepts, you can go out and learn more. Wearing a red cape is optional.
-<br />大多数的公式都能在Wikipedia（维基百科）里找到，但是其他的都淹没在杂志或者专业网站上。他们都是经典的（不是贝叶斯Bayesian），并且我加了一些简要的说明。我还加了连接和引用，这样即使你对下划线的概念不熟悉，你也能链接出去并且学到更多。穿不穿红披风是你的选择。
-<br />Send suggestions and corrections to emmiller@gmail.com
-<br />如有建议和更正，请发邮件到emmiller@gmail.com（译者注，关于翻译的建议和更正请发邮件到liuhongyuan99@gmail.com)
+<br /><img src="/images/statis/formulas-superman.jpg">
+<!-- <br />Unfortunately, not enough programmers have this superpower. That's a shame, because the application of statistics can almost always enhance the display and interpretation of data.
+ --><br />遗憾的是，不是所有的程序员都有这项超能力。你应该感到羞愧，因为统计知识的应用总是能够加强展示效果，并且能很好的解释数据的意义。
+<!-- <br />As my modest contribution to developer-kind, I've collected together the statistical formulas that I find to be most useful; this page presents them all in one place, a sort of statistical cheat-sheet for the practicing programmer.
+ --><br />我收集了一些自认为最有用的统计公式，就当是给程序员们的一点贡献。这一页中集中展示了所有的统计公式，给所有的实践中的程序员做个小抄。
+<!-- <br />Most of these formulas can be found in Wikipedia, but others are buried in journal articles or in professors' web pages. They are all classical (not Bayesian), and to motivate them I have added concise commentary. I've also added links and references, so that even if you're unfamiliar with the underlying concepts, you can go out and learn more. Wearing a red cape is optional.
+ --><br />大多数的公式都能在Wikipedia（维基百科）里找到，但是其他的都淹没在杂志或者专业网站上。他们都是经典的（不是贝叶斯Bayesian），并且我加了一些简要的说明。我还加了连接和引用，这样即使你对下划线的概念不熟悉，你也能链接出去并且学到更多。穿不穿红披风是你的选择。
+<!-- <br />Send suggestions and corrections to emmiller@gmail.com
+ --><br />如有建议和更正，请发邮件到emmiller@gmail.com（译者注，关于翻译的建议和更正请发邮件到liuhongyuan99@gmail.com)
+<hr>
+<h2>目录</h2>
+
+<ol>
+    <li><strong><a href="#mean">报告平均的公式<!-- Formulas For Reporting Averages--></a></strong>
+    <ol>
+        <li><a href="#mean_sd"><!-- Corrected Standard Deviation--></a>
+        </li><li><a href="#mean_se">&#26631;&#20934;&#35823;&#24046;&#22343;&#20540;<!--Standard Error of the Mean--></a>
+        </li><li><a href="#mean_ci">&#22260;&#32469;&#22343;&#20540;&#30340;&#32622;&#20449;&#21306;&#38388;<!--Confidence Interval Around the Mean--></a>
+        </li><li><a href="#mean_t">&#21452;&#26679;&#26412;T&#26816;&#39564;<!--Two-Sample T-Test--></a>
+    </li></ol>
+    </li><li><strong><a href="#prop">有关比例的公式<!--Formulas For Reporting Proportions--></a></strong>
+    <ol>
+        <li><a href="#prop_ci">Confidence Interval of a Bernoulli Parameter</a>
+        </li><li><a href="#prop_mci">Multinomial Confidence Intervals</a>
+        </li><li><a href="#prop_chi">Chi-Squared Test</a>
+    </li></ol>
+    </li><li><strong><a href="#count">Formulas For Reporting Count Data</a></strong>
+    <ol>
+        <li><a href="#count_sd">Standard Deviation of a Poisson Distribution</a>
+        </li><li><a href="#count_ci">Confidence Interval Around the Poisson Parameter</a>
+        </li><li><a href="#count_test">Conditional Test of Two Poisson Parameters</a>
+    </li></ol>
+    </li><li><strong><a href="#dist">Formulas For Comparing Distributions</a></strong>
+    <ol>
+        <li><a href="#dist_1">Comparing an Empirical Distribution to a Known Distribution</a>
+        </li><li><a href="#dist_2">Comparing Two Empirical Distributions</a>
+        </li><li><a href="#dist_k">Comparing Three or More Empirical Distributions</a>
+    </li></ol>
+    </li><li><strong><a href="#trend">Formulas For Drawing a Trend Line</a></strong>
+    <ol>
+        <li><a href="#trend_slope">Slope of a Best-Fit Trend Line</a>
+        </li><li><a href="#trend_se">Standard Error of the Slope</a>
+        </li><li><a href="#trend_ci">Confidence Interval Around the Slope</a>
+    </li></ol>
+</li></ol>
+<hr>
+<a name="mean"></a>
+<h2>1.有关平均的公式</h2>
+
+<!--<p>One of the first programming lessons in any language is to compute an average. But rarely does anyone stop to ask: what does the average actually tell us about the underlying data?</p>-->
+<p>学习编程语言的第一堂课上往往会计算平均值。但是很少有人会问：平均值到底告诉我们了数据的什么东西？</p>
+<a name="mean_sd"></a>
+<h3>1.1 标准差</h3>
+<!-- 
+<p>The standard deviation is a single number that reflects how <em>spread out</em> the data actually is. It should be reported alongside the average (unless the user will be confused).</p> -->
+<p>
+	标准差是一个数字，反映组内个体间的离散程度，它应该和平均值结合起来看（除非用户迷糊了）。<br>
+	<img src="/images/statis/sd.jpg">
+	参考：<a href="http://zh.wikipedia.org/wiki/%E6%A8%99%E6%BA%96%E5%B7%AE">标准差</a>
+</p>
 
  	</p>
 <p>{{ page.date | date_to_string }}</p>
