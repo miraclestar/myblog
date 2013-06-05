@@ -7,16 +7,23 @@ category: tech
  <p>
  <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">http://www.evanmiller.org/how-not-to-sort-by-average-rating.html</a>
 还是这位兄弟的博客文章
-之前一直困扰我的问题，怎么根据用户好坏评价来排序？
+解决了之前一直困扰我的问题，怎么根据用户好坏评价来排序？
 
-PROBLEM: You are a web programmer. You have users. Your users rate stuff on your site. You want to put the highest-rated stuff at the top and lowest-rated at the bottom. You need some sort of "score" to sort by.
+原博客文章就不翻译了，这里只翻译正确的那个：
 
-CORRECT SOLUTION: Score = Lower bound of Wilson score confidence interval for a Bernoulli parameter
+<!-- PROBLEM: You are a web programmer. You have users. Your users rate stuff on your site. You want to put the highest-rated stuff at the top and lowest-rated at the bottom. You need some sort of "score" to sort by. -->
+问题：假如你是一个web程序员，你有很多用户，你的用户会在你的网站评价一些东西。你想把评价最高的一些东西放在上面，评价低的放下面。那么你就需要根据用户的评分进行排序。怎么排呢？
+前面有两个错误的算法：一个是简单的根据正面评价来排名，这个缺点就是如果负面评价也很多。比如：一个正面100负面300的评价，和一个正面100负面0评价的排序，哪个好？
+另一个是根据正面评价的比例来排名，这个也有个问题，就是小样本，比如：1/1=100%,和100/106，哪个排名应该更靠前？
+<!-- CORRECT SOLUTION: Score = Lower bound of Wilson score confidence interval for a Bernoulli parameter -->
+正确的方法：Score = Lower bound of Wilson score confidence interval for a Bernoulli parameter
 
-Say what: We need to balance the proportion of positive ratings with the uncertainty of a small number of observations. Fortunately, the math for this was worked out in 1927 by Edwin B. Wilson. What we want to ask is: Given the ratings I have, there is a 95% chance that the "real" fraction of positive ratings is at least what? Wilson gives the answer. Considering only positive and negative ratings (i.e. not a 5-star scale), the lower bound on the proportion of positive ratings is given by:
+<!-- Say what: We need to balance the proportion of positive ratings with the uncertainty of a small number of observations. Fortunately, the math for this was worked out in 1927 by Edwin B. Wilson. What we want to ask is: Given the ratings I have, there is a 95% chance that the "real" fraction of positive ratings is at least what? Wilson gives the answer. Considering only positive and negative ratings (i.e. not a 5-star scale), the lower bound on the proportion of positive ratings is given by: -->
+什么意思呢：我们需要在正面评价比例和小样本不确定性两者之间进行一个平衡（译者注：即针对前面那种错误的排序方式的缺点做改良）。幸运的是，在1927年，EdwinB.Wilson就已经解决了这个数学问题。我们想要问的是：鉴于我们已经有的评价，至少多少样本才能保证有95%的比例，使正面评价比例真实有效？Wilson给了我们答案。条件是只有正面和负面两种评价（不包含5星评价），这个下限是这样计算的：
 <img src="rating-equation.png">
 
 (Use minus where it says plus/minus to calculate the lower bound.) Here p̂ is the observed fraction of positive ratings, zα/2 is the (1-α/2) quantile of the standard normal distribution, and n is the total number of ratings. The same formula implemented in Ruby:
+（计算下限的话用减法“±”取“-”）这里的p̂表示正面评价的比例， zα/2是(1-α/2)的正态分布的分位数，n就是评价样本总数。公式的Ruby实现如下：
 
 {% highlight ruby %}
 require 'statistics2'
@@ -30,9 +37,13 @@ def ci_lower_bound(pos, n, confidence)
     (phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
 end
 {% endhighlight %}
+<!-- pos is the number of positive ratings, n is the total number of ratings, and confidence refers to the statistical confidence level: pick 0.95 to have a 95% chance that your lower bound is correct, 0.975 to have a 97.5% chance, etc. The z-score in this function never changes, so if you don't have a statistics package handy or if performance is an issue you can always hard-code a value here for z. (Use 1.96 for a confidence level of 0.95.)
+ -->
+ pos 是正面评价的个数, n 是评价的总数, confidence表示置信度，选择0.95就是有95%的概率算出来下限是对的，0.975就是说有97.5%的概率计算的下限是对的，等等。z值在这个函数里是不变的，所以如果你没有统计用函数包，或者有性能问题的话，就硬编码在里面好了（置信水平位0.95的话z取值1.96）。
 
-pos is the number of positive ratings, n is the total number of ratings, and confidence refers to the statistical confidence level: pick 0.95 to have a 95% chance that your lower bound is correct, 0.975 to have a 97.5% chance, etc. The z-score in this function never changes, so if you don't have a statistics package handy or if performance is an issue you can always hard-code a value here for z. (Use 1.96 for a confidence level of 0.95.)
-参考资料 <a href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">Wilson score interval</a>
-另一个文章讲的也很细，内容几乎一样，不知道是不是一个作者<a href="http://www.marzapower.com/2010/07/29/how-to-sort-rated-content/">how-to-sort-rated-content/</a>
+上述是针对只有好坏两种评价的排名方法，还有一个<a href="http://www.evanmiller.org/bayesian-average-ratings.html">贝叶斯平均排名</a>可以用来对现在比较普遍的5星评价机制来进行排名。
+参考资料 <a href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">Wilson score interval(Wikipedia)</a>
+另一个文章讲的也很细，内容几乎一样，不知道是不是抄袭<a href="http://www.marzapower.com/2010/07/29/how-to-sort-rated-content/">how-to-sort-rated-content/</a>
+
  	</p>
 <p>{{ page.date | date_to_string }}</p>
