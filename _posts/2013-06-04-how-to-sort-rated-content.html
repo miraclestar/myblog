@@ -1,0 +1,38 @@
+---
+layout: default
+title: 怎么根据用户评价排序
+category: tech
+---
+<h2>{{ page.title }}</h2>
+ <p>
+ <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">http://www.evanmiller.org/how-not-to-sort-by-average-rating.html</a>
+还是这位兄弟的博客文章
+之前一直困扰我的问题，怎么根据用户好坏评价来排序？
+
+PROBLEM: You are a web programmer. You have users. Your users rate stuff on your site. You want to put the highest-rated stuff at the top and lowest-rated at the bottom. You need some sort of "score" to sort by.
+
+CORRECT SOLUTION: Score = Lower bound of Wilson score confidence interval for a Bernoulli parameter
+
+Say what: We need to balance the proportion of positive ratings with the uncertainty of a small number of observations. Fortunately, the math for this was worked out in 1927 by Edwin B. Wilson. What we want to ask is: Given the ratings I have, there is a 95% chance that the "real" fraction of positive ratings is at least what? Wilson gives the answer. Considering only positive and negative ratings (i.e. not a 5-star scale), the lower bound on the proportion of positive ratings is given by:
+<img src="rating-equation.png">
+
+(Use minus where it says plus/minus to calculate the lower bound.) Here p̂ is the observed fraction of positive ratings, zα/2 is the (1-α/2) quantile of the standard normal distribution, and n is the total number of ratings. The same formula implemented in Ruby:
+
+{% highlight ruby %}
+require 'statistics2'
+
+def ci_lower_bound(pos, n, confidence)
+    if n == 0
+        return 0
+    end
+    z = Statistics2.pnormaldist(1-(1-confidence)/2)
+    phat = 1.0*pos/n
+    (phat + z*z/(2*n) - z * Math.sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
+end
+{% endhighlight %}
+
+pos is the number of positive ratings, n is the total number of ratings, and confidence refers to the statistical confidence level: pick 0.95 to have a 95% chance that your lower bound is correct, 0.975 to have a 97.5% chance, etc. The z-score in this function never changes, so if you don't have a statistics package handy or if performance is an issue you can always hard-code a value here for z. (Use 1.96 for a confidence level of 0.95.)
+参考资料 <a href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">Wilson score interval</a>
+另一个文章讲的也很细，内容几乎一样，不知道是不是一个作者<a href="http://www.marzapower.com/2010/07/29/how-to-sort-rated-content/">how-to-sort-rated-content/</a>
+ 	</p>
+<p>{{ page.date | date_to_string }}</p>
