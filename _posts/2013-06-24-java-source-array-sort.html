@@ -1,0 +1,97 @@
+---
+layout: default
+title: java源码里数组是怎么排序的
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+<br />放假，结婚，心都飞了，看看代码收收心。返璞归真，再来看算法，
+<br />
+<br />就再看看java源码里是怎么排序的，曾经看过几次，工作也不用，就忘的差不多了。
+<br />
+<br />下面代码是整型数组的排序代码，注释很清楚，是改良的快排，性能n*log(n).
+<br />
+<br />程序开始做了个判断，对于数组长度小于7的，进行插入排序，大于7采用改良快排；
+<br />
+<br />重读这段代码，发现仍然有很多值得学习的东西，代码风格，注释十分清晰，让人一看便知代码是干嘛的，虽然我也写注释，不过注释比这差多了。把注释解释下吧，英文的毕竟有些难以理解。
+
+
+{% highlight java %}
+ /**
+     * Sorts the specified array of ints into ascending numerical order.
+     * The sorting algorithm is a tuned quicksort, adapted from Jon
+     * L. Bentley and M. Douglas McIlroy's "Engineering a Sort Function",
+     * Software-Practice and Experience, Vol. 23(11) P. 1249-1265 (November
+     * 1993).  This algorithm offers n*log(n) performance on many data sets
+     * that cause other quicksorts to degrade to quadratic performance.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(int[] a) {
+	sort1(a, 0, a.length);
+    }
+    private static void sort1(int x[], int off, int len) {
+	// Insertion sort on smallest arrays
+	if (len < 7) {
+	    for (int i=off; i<len+off; i++)
+		for (int j=i; j>off && x[j-1]>x[j]; j--)
+		    swap(x, j, j-1);
+	    return;
+	}
+
+	// 找一个用来分位的数字
+	int m = off + (len >> 1);       // 小数组m取中间的，其实就只有len=7的时候这句才有效
+	if (len > 7) {
+	    int l = off;
+	    int n = off + len - 1;
+	    if (len > 40) {        // 对于较大的数组，假设一个中位数为第9个数
+		int s = len/8;
+		l = med3(x, l,     l+s, l+2*s);
+		m = med3(x, m-s,   m,   m+s);
+		n = med3(x, n-2*s, n-s, n);
+	    }
+	    m = med3(x, l, m, n); // Mid-size, med of 3 //中等的数组就从头、尾、中间三个里选一个中位数
+	}
+	int v = x[m];
+
+	// Establish Invariant: v* (<v)* (>v)* v*；这个注释有些晦涩，其实是把和中间数相等的数放到数组两头，中间依次是小于v和大于v的数
+	int a = off, b = a, c = off + len - 1, d = c;
+	while(true) {
+	    while (b <= c && x[b] <= v) {
+		if (x[b] == v)
+		    swap(x, a++, b);
+		b++;
+	    }
+	    while (c >= b && x[c] >= v) {
+		if (x[c] == v)
+		    swap(x, c, d--);
+		c--;
+	    }
+	    if (b > c)
+		break;
+	    swap(x, b++, c--);
+	}
+
+	// 再把中间数挪到中间去，这个算法好蛋疼。。
+	int s, n = off + len;
+	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
+	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
+
+	// 递归调用直到所有的都有序
+	if ((s = b-a) > 1)
+	    sort1(x, off, s);
+	if ((s = d-c) > 1)
+	    sort1(x, n-s, s);
+    }
+        /**
+     * Swaps x[a] with x[b].
+     */
+    private static void swap(int x[], int a, int b) {
+	int t = x[a];
+	x[a] = x[b];
+	x[b] = t;
+    }
+
+       {% endhighlight %}
+</p>
+<p>{{ page.date | date_to_string }}</p>
