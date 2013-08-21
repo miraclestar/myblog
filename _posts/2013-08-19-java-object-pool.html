@@ -1,0 +1,100 @@
+---
+layout: default
+title: java对象池
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+<br />最近又接手了几个离职同事的项目，看了他们的代码，里面有个对象池的东东，感觉还不错，于是研究一下。
+<br />因为是服务器端的性能要求很高的一个系统，所以使用了对象池。
+<br />对象池是啥，数据库连接池知道是啥不？类比数据库连接池，对象池就是用来缓存对象的。
+<br />还是摘一段：对象池化的基本思路是：将用过的对象保存起来，等下一次需要这种对象的时候，再拿出来重复使用，从而在一定程度上减少频繁创建对象所造成的开销。用于充当保存对象的“容器”，被称为“对象池”（Object Pool，或简称Pool）。
+<br />贴一段比较流行的一段话说明一下：
+<br />Java对象的生命周期大致包括三个阶段：对象的创建，对象的使用，对象的清除。因此，对象的生命周期长度可用如下的表达式表示：T = T1 + T2 +T3。其中T1表示对象的创建时间，T2表示对象的使用时间，而T3则表示其清除时间。由此，我们可以看出，只有T2是真正有效的时间，而T1、T3则是对象本身的开销。下面再看看T1、T3在对象的整个生命周期中所占的比例。
+<br />
+<br />我们知道，Java对象是通过构造函数来创建的，在这一过程中，该构造函数链中的所有构造函数也都会被自动调用。另外，默认情况下，调用类的构造函数时，Java会把变量初始化成确定的值：所有的对象被设置成null，整数变量（byte、short、int、long）设置成0，float和double变量设置成0.0，逻辑值设置成false。所以用new关键字来新建一个对象的时间开销是很大的，如下表所示。
+<table border=1>
+	<tr>
+		<td colspan='3'>
+			一些操作所耗费时间的对照表
+		</td>
+	</tr>
+	<tr>
+		<td>操作</td>
+		<td>示例</td>
+		<td>标准化时间</td>
+	</tr>
+	<tr>
+		<td>本地赋值</td>
+		<td>i=n</td>
+		<td>1</td>
+	</tr>
+	<tr>
+		<td>实例赋值</td>
+		<td>this.i=n</td>
+		<td>1.2</td>
+	</tr>
+	<tr>
+		<td>方法调用</td>
+		<td>Fun()</td>
+		<td>5.9</td>
+	</tr>
+	<tr>
+		<td>新建对象</td>
+		<td>new Object()</td>
+		<td>980</td>
+	</tr>
+	<tr>
+		<td>新建数组</td>
+		<td>new int[10]{}</td>
+		<td>3100</td>
+	</tr>
+</table>
+<br />新建一个对象需要980个单位的时间，是本地赋值时间的980倍，是方法调用时间的166倍，而若新建一个数组所花费的时间就更多了。
+<br />再看清除对象的过程。我们知道，Java语言的一个优势，就是Java程序员勿需再像C/C++程序员那样，显式地释放对象，而由称为垃圾收集器（Garbage Collector）的自动内存管理系统，定时或在内存凸现出不足时，自动回收垃圾对象所占的内存。凡事有利总也有弊，这虽然为Java程序设计者提供了极大的方便，但同时它也带来了较大的性能开销。这种开销包括两方面，首先是对象管理开销，GC为了能够正确释放对象，它必须监控每一个对象的运行状态，包括对象的申请、引用、被引用、赋值等。其次，在GC开始回收“垃圾”对象时，系统会暂停应用程序的执行，而独自占用CPU。
+<br />因此，如果要改善应用程序的性能，一方面应尽量减少创建新对象的次数；同时，还应尽量减少T1、T3的时间，而这些均可以通过对象池技术来实现。
+<br />先给一个简单的对象池，这个不是通用的对象池，大家可以根据自己的需求修改就可以了。
+
+{% highlight java %}
+public class ObjectPool {
+
+	private static final int POOL_SIZE=300;
+
+	public static Object borrowObject()
+	{
+		Object ret;
+		synchronized(pools)
+		{
+			ret = pools.poll();
+		}
+		if ( ret == null )
+		{
+			ret = new Object();
+		}
+		return ret;
+	}
+	
+	public static void returnObject(Object obj)
+	{
+		obj.clear();//这个clear就是把obj对象的内容清理一下，还原成刚创建的样子。
+		synchronized(pools)
+		{
+			if ( pools.size() < POOL_SIZE )
+			{
+				pools.add(obj);
+			}
+		}
+	}
+	
+	private static List<Object> pools = new LinkedList<Object>();
+}
+{% endhighlight %}
+<br />
+网上有很多实用Commons Pool来实现对象池的，是可以通用的方法，见下面的参考资料<br /><hr /><br />
+参考资料：<ul>
+		<li><a href="http://www.ibm.com/developerworks/cn/java/l-common-pool/">http://www.ibm.com/developerworks/cn/java/l-common-pool/</a></li>
+		<li><a href="http://reallyafei.iteye.com/blog/372893">http://reallyafei.iteye.com/blog/372893</a></li>
+</ul>
+
+</p>
+<p>{{ page.date | date_to_string }}</p>
