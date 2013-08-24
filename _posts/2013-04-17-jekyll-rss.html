@@ -32,27 +32,6 @@ tags: [jekyll, gitpages, rss, sitemap, robots]
 	<br>
 	sitemap，搜了一篇<a href="http://vvv.tobiassjosten.net/jekyll/jekyll-sitemap-without-plugins/">文章</a>,直接用jekyll的脚本就可以生成了。
 	我的sitemap.xml:
-	{%highlight java%}
----
----
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {% for post in site.posts %}
-    <url>
-        <loc>http://blog.xmark.info{{ post.url | remove: 'index.html' }}</loc>
-    </url>
-    {% endfor %}
-
-    {% for page in site.pages %}
-    {% if page.layout != nil %}
-    {% if page.layout != 'feed' %}
-    <url>
-        <loc>http://blog.xmark.info{{ page.url | remove: 'index.html' }}</loc>
-    </url>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-</urlset>
-	{%endhighlight%}
+	http://blog.xmark.info/sitemap.xml
 </p>
 <p>{{ page.date | date_to_string }}</p>
