@@ -1,0 +1,45 @@
+---
+layout: default
+title: jekyll的bug！Tag was never closed
+category: tech
+tags: github
+---
+<h2>{{ page.title }}</h2>
+ 
+<p>
+<br />最近提交的博客都不显示了，搞得很纠结。
+<br />先把重点告诉你，如果你也发现jekyll执行的时候报错是Tag was never closed
+<br />那么在你的blog的_config.yml文件中，加上这句：excerpt_separator: "" 
+<br />就可以了。
+<br />说说我的悲惨的找错经历吧：
+<br />想在本地jekyll运行下，看看到底是肿么回事，结果之前装的jekyll环境运行不了，发现原来是jekyll更新了！
+<br />那就新装个吧，搞来搞去，遇到各种坑，看了<a href="http://dannyli.net/notes/fix-problems-of-jekyll-on-windows/">这个博客</a>，里面问题都遇到了，
+<br />除了这些问题,还遇到了一个google都不知道的ERROR——Liquid :opration not permitted. 没搜到答案。
+<br />受够了！乖乖的从官网看看到底是咋回事，发现jekyll官方都不支持window！是啊。作为程序员谁还用windows。。(#‵′)靠！
+<br />好吧，换虚拟机，上ubuntu，看<a href="http://jekyllrb.com/docs/installation/">这里</a>装环境。
+<br />没想到ubuntu上装起来也这么多坑！ubuntu版本12.10；
+<br />在装jekyll之前要装，ruby，rubygem，rdoc，ruby-dev;
+<br />{%highlight java%}
+<br />sudo apt-get install ruby
+<br />{%endhighlight%}
+<br />然后<a href="http://rubygems.org/pages/download">这里</a>下载个rubygem，解压后cd进目录，执行
+<br />{%highlight java%}
+<br />ruby setup.rb 
+<br />{%endhighlight%}
+<br />ok继续执行
+<br />{%highlight java%}
+<br />sudo apt-get install ruby1.9.1-dev
+<br />sudo gem install rdoc
+<br />sudo gem install jekyll //安装jekyll
+<br />{%endhighlight%}
+<br />
+<br />好吧，装好这些，先搞个测试，执行 jekyll new blog ，进到blog目录，启动jekyll，在blog的根目录执行命令：jekyll serve
+<br />没报错的话，浏览器查看：localhost:4000，如果出来jekyll的demo就ok了。
+<br />
+<br />如果报错，上网查查看是啥错吧，
+<br />反正我在之前我的博客里执行，会报highlight was never closed。明明没有语法错误啊。
+<br />最后发现<a href="http://blog.slaks.net/2013-08-09/jekyll-tag-was-never-closed/">这个博客</a>讲的很明白
+
+
+
+<p>{{ page.date | date_to_string }}</p>
