@@ -1,4 +1,5 @@
 markdown: rdiscount
+excerpt_separator: ""
 auto: true
 pygments: true
 title : Miracle Space

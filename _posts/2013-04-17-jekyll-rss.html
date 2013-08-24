@@ -22,17 +22,17 @@ tags: [jekyll, gitpages, rss, sitemap, robots]
 	robots.txt（统一小写）是一种存放于网站根目录下的ASCII编码的文本文件，它通常告诉网络搜索引擎的漫游器（又称网络蜘蛛），此网站中的哪些内容是不应被搜索引擎的漫游器获取的，哪些是可以被（漫游器）获取的。<br>
 	看<a href="https://zh.wikipedia.org/wiki/Robots.txt#.E8.87.AA.E5.8A.A8.E5.8F.91.E7.8E.B0Sitemaps.E6.96.87.E4.BB.B6">维基百科</a><br>
 	我的robots.txt:<br>
-	{% highlight java %}
+	{%highlight java%}
 	User-agent: *
 	Disallow: /images/
 	Disallow: /life/
 	Disallow: /stylesheets/
 	Sitemap: <http://blog.xmark.info/sitemap.xml>
-	{%	endhighlight %}
+	{%endhighlight%}
 	<br>
 	sitemap，搜了一篇<a href="http://vvv.tobiassjosten.net/jekyll/jekyll-sitemap-without-plugins/">文章</a>,直接用jekyll的脚本就可以生成了。
 	我的sitemap.xml:
-	{% highlight java %}
+	{%highlight java%}
 ---
 ---
 <?xml version="1.0" encoding="UTF-8"?>
@@ -53,6 +53,6 @@ tags: [jekyll, gitpages, rss, sitemap, robots]
     {% endif %}
     {% endfor %}
 </urlset>
-	{%	endhighlight %}
+	{%endhighlight%}
 </p>
 <p>{{ page.date | date_to_string }}</p>
