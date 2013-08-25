@@ -20,18 +20,18 @@ tags: github
 <br />没想到ubuntu上装起来也这么多坑！ubuntu版本12.10；
 <br />在装jekyll之前要装，ruby，rubygem，rdoc，ruby-dev;
 <br />{%highlight java%}
-<br />sudo apt-get install ruby
-<br />{%endhighlight%}
+sudo apt-get install ruby
+{%endhighlight%}
 <br />然后<a href="http://rubygems.org/pages/download">这里</a>下载个rubygem，解压后cd进目录，执行
 <br />{%highlight ruby%}
 ruby setup.rb 
-<br />{%endhighlight%}
+{%endhighlight%}
 <br />ok继续执行
 <br />{%highlight ruby%}
 sudo apt-get install ruby1.9.1-dev
 sudo gem install rdoc
 sudo gem install jekyll //安装jekyll
-<br />{%endhighlight%}
+{%endhighlight%}
 <br />
 <br />好吧，装好这些，先搞个测试，执行 jekyll new blog ，进到blog目录，启动jekyll，在blog的根目录执行命令：jekyll serve
 <br />没报错的话，浏览器查看：localhost:4000，如果出来jekyll的demo就ok了。
