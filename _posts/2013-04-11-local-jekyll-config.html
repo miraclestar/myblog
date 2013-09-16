@@ -17,10 +17,10 @@ category: tech
 	</li>
 	<li>
 	然后，命令行，cd 到devkit目录执行 : <strong>ruby dk.rb init</strong> 这一步生成了config.yml文件,打开这个文件，除了注释应该有如下两行
-{% highlight java%}
+{%highlight java%}
 --- 
 - d:/Ruby192
-{% endhighlight %}
+{%endhighlight%}
 第二行是ruby的目录，如果没有，自己加上。
 	</li>
 	<li>
@@ -40,5 +40,7 @@ category: tech
 	另外，本地对中文的文件名也识别不出。<br>
 浏览器显示的错误如果是：ERROR no access permission to `/' 那就是你的post的YAML写的不对，解决办法：仔细检查_post，把_post目录中有关文件的YAML格式改为：参数＋：＋空格+参数值。
 	
+	
+	另参考：http://www.madhur.co.in/blog/2011/09/01/runningjekyllwindows.html
 </p>
 <p>{{ page.date | date_to_string }}</p>
