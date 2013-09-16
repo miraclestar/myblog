@@ -1,0 +1,29 @@
+---
+layout: default
+title: 一个好玩的java花招
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+都好久没更新blog了，太懒了。打算一个月2篇的。
+今儿看了下Quartz的实现，先凑合一篇吧。
+Quartz的对象创建，多处是这样的：
+{% highlight java %}
+	JobDetail job = JobBuilder.newJob(HelloJob.class).withIdentity("job1", "group1").build();
+	Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "gro1up1").startAt(runTime).build();
+{% endhighlight %}
+后面跟了那么多点，都是干嘛的？
+看了看源码，发现其实那都是给该对象属性赋值。摘一个出来看看是这样的：
+{% highlight java %}
+   public TriggerBuilder<T> withIdentity(String name) {
+        key = new TriggerKey(name, null);
+        return this;
+    }  
+{% endhighlight %}
+其实是给该对象的属性赋值。好蛋疼的感觉。。
+人家都是用setter来赋值。Quartz标新立异，非要这么搞。搞不懂这样写有什么好。
+如果赋值多了，一行要写很长。看着很费劲。
+
+
+</p>
+<p>{{ page.date | date_to_string }}</p>
