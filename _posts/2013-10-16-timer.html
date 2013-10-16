@@ -1,0 +1,75 @@
+---
+layout: default
+title: java中timer怎么实现的
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+<br />度了蜜月回来，还没怎么写blog，先凑一篇吧。
+<br />Timer或者Quatz，网上教程一搜一大堆，想没想过其具体实现是什么样的？
+<br />在看源码之前，猜测它是怎么做到定时执行，我的猜测主要有2个，
+<br />一个是调用系统的接口，猜测系统应该会提供一个定时的api，这里的系统就是java虚拟机；
+<br />另一个猜测就是一个thread，死循环不停把任务的时间和当前时间对比，时间刚好的时候，就执行。
+<br />
+<br />到底是那种，看看代码就知道了,下面是TimerThread类里翻出来的：
+
+{% highlight java %}
+ /**
+     * The main timer loop.  (See class comment.)
+     */
+    private void mainLoop() {
+        while (true) {
+            try {
+                TimerTask task;
+                boolean taskFired;
+                synchronized(queue) {
+                    // Wait for queue to become non-empty
+                    while (queue.isEmpty() && newTasksMayBeScheduled)
+                        queue.wait();
+                    if (queue.isEmpty())
+                        break; // Queue is empty and will forever remain; die
+
+                    // Queue nonempty; look at first evt and do the right thing
+                    long currentTime, executionTime;
+                    task = queue.getMin();
+                    synchronized(task.lock) {
+                        if (task.state == TimerTask.CANCELLED) {
+                            queue.removeMin();
+                            continue;  // No action required, poll queue again
+                        }
+                        currentTime = System.currentTimeMillis();
+                        executionTime = task.nextExecutionTime;
+                        if (taskFired = (executionTime<=currentTime)) {
+                            if (task.period == 0) { // Non-repeating, remove
+                                queue.removeMin();
+                                task.state = TimerTask.EXECUTED;
+                            } else { // Repeating task, reschedule
+                                queue.rescheduleMin(
+                                  task.period<0 ? currentTime   - task.period
+                                                : executionTime + task.period);
+                            }
+                        }
+                    }
+                    if (!taskFired) // Task hasn't yet fired; wait
+                        queue.wait(executionTime - currentTime);
+                }
+                if (taskFired)  // Task fired; run it, holding no locks
+                    task.run();
+            } catch(InterruptedException e) {
+            }
+        }
+    }
+{% endhighlight %}
+
+<br />看这个方法的while（true）就知道了，实现方式是第二个猜测。
+<br />
+<br />另外关于实现的一些说明：
+<br /> * <p>Implementation note: This class scales to large numbers of concurrently
+<br /> * scheduled tasks (thousands should present no problem).  Internally,
+<br /> * it uses a<strong> binary heap </strong>to represent its task queue, so the cost to schedule
+<br /> * a task is O(log n), where n is the number of concurrently scheduled tasks.
+<br />
+<br />这个TaskQueue队列是用堆来实现的，如果有需要用堆的地方可以直接拿来复用，哈哈。
+
+</p>
+<p>{{ page.date | date_to_string }}</p>
