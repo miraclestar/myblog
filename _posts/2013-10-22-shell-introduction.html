@@ -53,13 +53,13 @@ category: tech
 <br />for的写法有很多，可以
 <br />for((i=1;i《100;i++))这样（“《”代替小于号），
 <br />也可以这样：
-<br /> {% highlight python %}
-<br />#! /bin/sh
-<br />for time in 17 18 19;
-<br />do
-<br />  echo "it's $time"
-<br />done
-<br />  {% endhighlight %}
+ {% highlight python %}
+#! /bin/sh
+for time in 17 18 19;
+do
+  echo "it's $time"
+done
+  {% endhighlight %}
 <br /><h3>  4、crontab用法</h3>
 <br />crontab -l, crontab -e
 <br />分 时 日 月 星期 command
@@ -69,13 +69,13 @@ category: tech
 <br />mysql -hhostip -p3306 -uuser -ppassword -Ddbname -e "select * from table">>abc.txt
 <br />
 <br /><h3>6、读文件</h3>
-<br />{% highlight python %}
-<br />   cat /sites/linuxpig.com.txt |while read LINE
-<br />     do
-<br />         echo $LINE
-<br />     done
-<br />  {% endhighlight %}
-<br />  
+{% highlight python %}
+   cat /sites/linuxpig.com.txt |while read LINE
+     do
+         echo $LINE
+     done
+  {% endhighlight %}
+  
 <br />  最后，贴个酷壳的博客，介绍sed和awk，很不错的
 <br /><a href="http://coolshell.cn/articles/9104.html">sed简介</a>
 <br /><a href="http://coolshell.cn/articles/9070.html">awk简介</a>

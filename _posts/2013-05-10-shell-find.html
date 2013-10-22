@@ -9,19 +9,20 @@ category: tech
 <br /> 	这一大堆日志，分布在各个不同名字命名的目录下，唯一的共同点就是都是.bz2文件,
 <br /> 	于是：find命令派上用场
 <br /> 	
-<br /> 	{% highlight java %}
+<br /> 	
 <br /> 	##找出所有的.bz2结尾的文件
 <br /> 	filelist=`find /home/abc/cbxx/ -maxdepth 3|grep .bz2`
 <br /> 	##写个循环读取就搞定了
-<br /> 	for f in $fl
-<br />	do
-<br />		temp=`bzcat $f |grep "special"|wc -l `;
-<br />        temp2=`bzcat $f|wc -l`##这里读了2遍文件，如果能只读一遍就更好了: )
-<br />        total=temp2+total;
-<br />        i=temp+i;
-<br />	done
-<br />	echo i/total*100|bc
-<br /> 	{% endhighlight %}
+{% highlight java %}
+	for f in $fl
+	do
+	temp=`bzcat $f |grep "special"|wc -l `;
+       temp2=`bzcat $f|wc -l`##这里读了2遍文件，如果能只读一遍就更好了: )
+       total=temp2+total;
+       i=temp+i;
+	done
+	echo i/total*100|bc
+	{% endhighlight %}
 
 update：20130528
 最近在用python，于是找了python看了看，也不错，呵呵
