@@ -1,0 +1,84 @@
+---
+layout: default
+title: shell常用命令
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+<br />shell常用命令在这里做个总结，工作时不时会用到，省的到处搜;
+<br /><h3>1、shell的if语句，网上<a href="http://blog.tektea.com/archives/2344.html">搜来的</a></h3>
+<br />一、if比较坑爹，写if语句要注意：
+<br />1. if与[之间要有空格
+<br />2. []与判断条件之间也必须有空格
+<br />3. ]与;之间不能有空格
+<br />二. 对字符串的判断
+<br />1. if [ str1=str2 ];then fi #当两个字符串相同时返回真
+<br />2. if [ str1!=str2 ];then fi #当两个字符串不相等时返回真
+<br />3. if [ -n str1 ];then fi #当字符串的长度大于0时返回真 (判断变量是否有值)
+<br />4. if [ -z str1 ];then fi #当字符串的长度为0时返回真
+<br />三. 对数字的判断
+<br />1. int1 -eq int2 #int1和int2相等
+<br />2. int1 -ne int2 #int1不相等int2
+<br />3. int1 -gt int2 #int1大于int2
+<br />4. int1 -ge int2 #int1大于等于int2
+<br />5. int1 -lt int2 #int1小于int2
+<br />6. int1 -le int2 #int1小于等于int2
+<br />四. 对文件属性的判断
+<br />1. -r file #用户可读为真
+<br />2. -w file #用户可写为真
+<br />3. -x file #用户可执行为真
+<br />4. -f file #文件存在且为正规文件为真
+<br />5. -d file #如果是存在目录为真
+<br />6. -c file #文件存在且为字符设备文件
+<br />7. -b file #文件存在且为块设备文件
+<br />8. -s file #文件大小为非0为真，可以判断文件是否为空
+<br />9. -e file #如果文件存在为真
+<br />五. 逻辑判断
+<br />1. -a #与
+<br />2. -o #或
+<br />3. ! #非
+<br />
+<br /><h3>2、grep用法</h3>
+<br />常用的grep选项有：
+<br />-c   只输出匹配行的计数。 
+<br />-i   不区分大小写（只适用于单字符）。
+<br />-h   查询多文件时不显示文件名。 
+<br />-l   查询多文件时只输出包含匹配字符的文件名。 
+<br />-n   显示匹配行及行号。 
+<br />-s   不显示不存在或无匹配文本的错误信息。 
+<br />-v   显示不包含匹配文本的所有行。
+<br />-C  n   显示匹配的附近n行，这个我经常用
+<br />
+<br /><h3>3、for/do/done用法</h3>
+<br />for的写法有很多，可以
+<br />for((i=1;i《100;i++))这样（“《”代替小于号），
+<br />也可以这样：
+<br /> {% highlight python %}
+<br />#! /bin/sh
+<br />for time in 17 18 19;
+<br />do
+<br />  echo "it's $time"
+<br />done
+<br />  {% endhighlight %}
+<br /><h3>  4、crontab用法</h3>
+<br />crontab -l, crontab -e
+<br />分 时 日 月 星期 command
+<br />注意一点是星期 0 到 6 （星期日到星期六）
+<br />
+<br /><h3>5、mysql访问数据库，获得数据，这个也经常用来导出特定的数据。</h3>
+<br />mysql -hhostip -p3306 -uuser -ppassword -Ddbname -e "select * from table">>abc.txt
+<br />
+<br /><h3>6、读文件</h3>
+<br />{% highlight python %}
+<br />   cat /sites/linuxpig.com.txt |while read LINE
+<br />     do
+<br />         echo $LINE
+<br />     done
+<br />  {% endhighlight %}
+<br />  
+<br />  最后，贴个酷壳的博客，介绍sed和awk，很不错的
+<br /><a href="http://coolshell.cn/articles/9104.html">sed简介</a>
+<br /><a href="http://coolshell.cn/articles/9070.html">awk简介</a>
+
+</p>
+<p>{{ page.date | date_to_string }}</p>
