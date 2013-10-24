@@ -75,7 +75,38 @@ done
          echo $LINE
      done
   {% endhighlight %}
-  
+ 贴一个曾经写的脚本
+ {% highlight python %}
+ #!/bin/bash
+
+Dt=`date -d "1 day ago" +%Y%m%d`
+
+#求最大值
+max=0
+
+for h in  01 02
+do
+       for m in 00 05 10 15 20 25 30 35 40 45 50 55
+       do
+		#从文件读取数据，求某一列的和。计算最大值
+              cur=`cat /home/liu/${Dt}/${Dt}${h}${m}.txt|awk '{sum+ =$2} END {print  sum}'`
+                if [ $cur -gt $max ]
+                then
+                        max=$cur
+                fi
+
+      done
+done
+
+setbw=`cat /home/liu/${Dt}/${Dt}2105.txt|awk '{s1+=$3} END {print  s1}'`
+dealbw=`cat /home/liu/${Dt}/${Dt}2105.txt|awk '{s1+=$4} END {print  s1}'`
+cactibw=`cat /home/liu/cact/${Dt}.txt`
+
+echo $max" "$setbw "  "$dealbw " "$cactibw
+
+setrate=`echo "scale=4; $max/$setbw"|bc`
+dealrate=`echo "scale=4; $max/$dealbw"|bc`
+ {% endhighlight %}
 <br />  最后，贴个酷壳的博客，介绍sed和awk，很不错的
 <br /><a href="http://coolshell.cn/articles/9104.html">sed简介</a>
 <br /><a href="http://coolshell.cn/articles/9070.html">awk简介</a>
