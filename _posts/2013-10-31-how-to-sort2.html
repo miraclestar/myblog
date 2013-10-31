@@ -35,7 +35,8 @@ SELECT widget_id, ((positive + 1.9208) / (positive + negative) -
 <br />这个sql执行的时候先通知DBA一声。O(∩_∩)O
 <br />测试了下
 <br />排序效果很不错：
-<tr>id</td><td>positive</td><td>negative</td><td>ci_lower_bound</td></tr>
+<table>
+<tr><td>id</td><td>positive</td><td>negative</td><td>ci_lower_bound</td></tr>
 <tr>
 8</td><td>1000</td><td>0</td><td>0.99617310141361</td></tr>
 <tr>
@@ -48,6 +49,7 @@ SELECT widget_id, ((positive + 1.9208) / (positive + negative) -
 1</td><td>1</td><td>1</td><td>0.0945286548008661</td></tr><tr>
 6</td><td>1000</td><td>10000</td><td>0.0856785659508549</td></tr><tr>
 3</td><td>10000</td><td>200000</td><td>0.0467164534235229</td></tr>
+</table>
 <br />
 <br />
 </p>
