@@ -29,8 +29,8 @@ category: tech
 SELECT widget_id, ((positive + 1.9208) / (positive + negative) - 
 	               1.96 * SQRT((positive * negative) / (positive + negative) + 0.9604) / 
 	                      (positive + negative)) / (1 + 3.8416 / (positive + negative)) 
-	   AS ci_lower_bound FROM widgets WHERE positive + negative > 0 
-	   ORDER BY ci_lower_bound DESC;
+	   AS score FROM widgets WHERE positive + negative > 0 
+	   ORDER BY score DESC;
 	      {% endhighlight %}	
 <br />这个sql执行的时候先通知DBA一声。O(∩_∩)O
 <br />测试了下
