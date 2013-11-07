@@ -1,10 +1,52 @@
 ---
 layout: default
 title: 利用NewTon's law of cooling 来做热度排名
-category: todo
+category: tech
 ---
 <h2>{{ page.title }}</h2>
 <p>又是evanmiller这位兄台的文章，<a href="http://www.evanmiller.org/rank-hotness-with-newtons-law-of-cooling.html">http://www.evanmiller.org/rank-hotness-with-newtons-law-of-cooling.html</a>
+<br />捡重点的翻来看看。
+<br />热度排名，作者推荐一个算法叫exponential decay（指数式衰减）.这个算法有三个组件：
+<br />1、每个新的内容都有初始的“温度”反应它的热度；
+<br />2、每当有人给这个内容来个赞，那么“温度”就会增加一个固定的数值；
+<br />3、这个“温度”会随着时间的流逝而降低。
+<br />这样一个根据“温度”来排序的热度排名就产生了。就像我们看到的，exponential decay这个算法很赞，因为：
+<br />1、他很容易理解；
+<br />2、数据库操作简单；
+<br />3、就算你的网站以后变得很大，也不用修改算法。
+<br />
+<br />首先来谈谈mechanics of exponential decay（力学的指数式衰减）。
+<br />由于一些活动导致这个内容的温度爆发是很简单的逻辑；
+<br />但是你怎么决定它的温度怎么降下来？
+<br />首先你要定义一个冷却率，那就是，多久之后温度T会刚好降到一半。基于此，你就开始算了：
+<br />(Current T) = (Last recorded T) × exp( -(Cooling rate) × (Hours since last recorded T) )
+<br />（exp函数是e的幂）
+<br />这个比较好的是，只有温度增长的时候，你才需要写数据库。
+<br />然后，如果你要一些内容的热度排名列表，你就可以计算他当前的温度，基于数据库里的最新数据，不管多久之前的。
+<br />意思呢，就是你不用不断地更新数据库，你也不用处理历史排名！
+<br />如果你要玩一下衰减参数，你就可以把最新的和最热的内容放到排名的最上面。设置一个小小的初始化“温度”，你就能看到一些全新的内容；用一个更小的衰减率，热门的内容就会持续更久。
+<br />
+<br />Graphically，下面这个图就是温度随时间下降的曲线。曲线的形状是不变的；参数只是改变坐标的比例。
+<br /><img src="/image/statis/hotness-decay.png">
+<br />参数的选择是根据最终的调用情况判定(或者不是；关于A/B测试的改天来问他）。
+<br />你的网站变得稍微流行点的时候，你可能想要改改参数，但是同样的参数在大量的网页行为时，也能很好的工作。
+<br />因为衰减的是指数而不是抛物线或者线性的，即使超级流行的内容在达到顶点后，也不会卡在排名顶部太久的，
+<br />总之，你需要做的：
+<br />1、给新的内容选择一些初始温度值；
+<br />2、选择一个衰减率（冷却率）；
+<br />3、选择一个温度增长值；
+<br />4、一个内容出现新的行为时，计算当前的温度，加上增长值，记录到当前时间；
+<br />5、用上面介绍的公式排序。
+<br />看吧，这样你就有一个“hot”排名了。这个算法的另一个用途是，列出论坛里最活跃的帖子（每个回复都增加一定的温度值）。
+<br />
+<br />最后一点，除了好计算，这也是事物冷却的规律，一块砖或是一个玉米粉蒸肉都是这样。这个规律就是传说中的，Newton's Law of Cooling.（牛顿冷却定律）
+<br />
+<br />引用：
+<br /><a href="http://en.wikipedia.org/wiki/Exponential_decay">Exponential decay (Wikipedia)</a>
+<br /><a href="http://en.wikipedia.org/wiki/Newton's_law_of_cooling#Newton.27s_law_of_cooling">Newton's Law of Cooling (Wikipedia)</a>
+
+好吧翻译完了，其实这个就是一个自然规律，用在了排名里。挺不错吼~以后有需要的时候来看看吧。
+
 
 </p>
 <p>{{ page.date | date_to_string }}</p>
