@@ -1,0 +1,66 @@
+---
+layout: default
+title: 家庭媒体共享，以及远程控制mbl脱机下载
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<br />马上这个月就过去了，还差一篇日志没写。
+<br />今儿在家，开始鼓捣之前买的西数的MyBookLive，不到800的价格，2T，很实惠。
+<br />网上搜了下，mbl自带系统，可以离线下载，只要装点东西就成了。
+<br />这个文档需要懂shell和ssh的基础。
+<br />
+<br />看这个帖子：http://nasyun.com/thread-7066-1-1.html
+<br />	先开启mbl的ssh。
+<br />步骤：
+<br />1.进入 http://MBL的IP地址/UI/ssh 开启SSH模式.
+<br />2、登录到mbl。用户名:root,默认密码为welc0me
+<br />3、下载个http://app.baotuba.com/mbl-thunder/xunlei_mbl.tar.gz
+<br />4、执行下面的脚本。
+<br />5、把生成的key，填到http://yuancheng.xunlei.com/这个NAS的激活码那个框里面；
+<br />6、ok了，下载器就绑定了，在上面的页面就可以创建下载任务了！
+{%highlight java%}
+#!/bin/sh
+
+# 解压文件
+rm -rf /DataVolume/xunlei		> /dev/null
+rm -rf /DataVolume/TDDOWNLOAD	> /dev/null
+rm -rf /DataVolume/ThunderDB	> /dev/null
+
+cd /shares/Public/mbl-thunder
+tar zxvf xunlei_mbl.tar.gz -C /DataVolume/  > /dev/null
+
+# 创建迅雷配置文件
+mkdir /DataVolume/TDDOWNLOAD
+mkdir /shares/Public/TDDOWNLOAD
+mount -o bind /shares/Public/TDDOWNLOAD /DataVolume/TDDOWNLOAD
+cd /DataVolume/xunlei
+echo "Start up the xunlei..."
+./portal -s
+./portal&
+killall portal > /dev/null
+echo "Getting the Key..."
+sleep 5
+wget http://127.0.0.1:9001/getsysinfo
+KEY=`cat getsysinfo | awk -F '"' '{print $2}'`
+if [ "$KEY" != "" ] then
+	echo "You remote Key is $KEY"
+	echo "Please go to http://yuancheng.xunlei.com/ and add you MBL!"
+	rm -rf getsysinfo
+else
+	rm -rf getsysinfo
+	echo "Get the KEY Fail!Please try it again!"
+fi
+{%endhighlight%}
+
+<hr>
+<br />本来是挺简单的，我这还遇到另一个问题，就是家里有2个路由，不在同一个网段，家里的小红（电信iptv的盒子）无法访问mbl
+<br />这个解决办法也很简单。
+<br />1、先把不连外网的路由器B的dhcp关闭；
+<br />2、把不连外网的路由B的lan口连到连外网的路由A的lan口就行了；
+<br />这样第二个路由就相当于一个集线器，都在同一个网段了。
+<br />用小红就可以直接观看mbl上的视频了。
+<br />
+<br />有没有物联网的意思？哈哈哈
+<br />在公司看到好看的电影直接远程，让mbl下载了，回家来就可以在电视上看啦。
+
+<p>{{ page.date | date_to_string }}</p>
