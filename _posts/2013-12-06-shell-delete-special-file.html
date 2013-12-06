@@ -1,0 +1,27 @@
+---
+layout: default
+title: shell删除特殊字符命名的文件
+category: tech
+---
+<h2>{{ page.title }}</h2>
+今天在linux下不小心建了一个目录名字是：“~”，想要删掉：
+rm -rf ~
+发现这个~这个符号不太对啊，这样会不会删掉当前用户的所有东东？
+答案是肯定的。
+
+那么这个目录怎么删呢？网上搜了下：
+可以这样：
+{% highlight java %}
+[jenkins@cdntest-5 liuhy]$ ls -il
+86638605 drwxrwxr-x 3 jenkins jenkins    4096 Dec  6 17:00 ~
+
+[jenkins@cdntest-5 liuhy]$ rm -rf "`find . -inum 86638605`"
+
+{% endhighlight %}
+
+ls -i可以打印出来文件的index num也就是inode的id。
+具体什么是inode就涉及到linux的文件存储方式了，可以参考：http://www.ruanyifeng.com/blog/2011/12/inode.html
+
+顺便看了阮一峰博客的其他文章，都挺不错的，就是他翻译的《黑客与画家》。
+
+<p>{{ page.date | date_to_string }}</p>
