@@ -1,0 +1,87 @@
+---
+layout: default
+title: java环形队列
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+今天被问到怎么用数组实现环形队列，想了半天才想起来怎么实现。
+是我太浮躁了，这种代码写的太少，之前一直感觉思路有了就能写出来，真要写的时候，还是会遇到各种各样的问题。
+
+简易代码：
+{% highlight java %}
+
+public class QueueTest {
+	public static void main(String[] args) {
+
+		QueueTest qt = new QueueTest();
+		try {
+			qt.add(9);
+			qt.add(10);
+			qt.add(8);
+			qt.add(1);
+			System.out.println(qt.poll());
+			qt.add(33);
+			qt.add(40);
+			System.out.println(qt.poll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	int head = 0;
+	int end = head;
+	int len = 5;
+	int cur = 0;
+	int[] arr = new int[len];
+
+	public void print() {
+		for (int i = 0; i < len; i++) {
+			System.out.print(arr[i] + ",");
+		}
+		System.out.println();
+	}
+
+	public void add(int ele) throws Exception {
+
+		if (cur >= 5) {
+			throw new Exception("full");
+		}
+		else {
+			arr[end] = ele;
+			cur++;
+			end++;
+			if (end >= len) {
+				end = 0;
+			}
+		}
+
+		print();
+	}
+
+	public int poll() throws Exception {
+
+		if (cur == 0) {
+			throw new Exception("empty");
+		}
+
+		int ret = arr[head];
+		head++;
+		if (head >= len) {
+			head = 0;
+		}
+		cur--;
+		print();
+
+		return ret;
+	}
+}
+ {% endhighlight %}
+
+网上看了看其他<a href="http://java.chinaitlab.com/base/840095.html">实现</a>.
+
+
+
+</p>
+<p>{{ page.date | date_to_string }}</p>
