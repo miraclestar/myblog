@@ -90,15 +90,16 @@ public class CircleQueue<E> {
 
 	private int head = 0;
 	private int end = 0;
-	private int lenth = 5;
+	private int lenth = 10;
 	private int cur = 0;
 	private E[] arr;
 	
 	public CircleQueue() {
-		arr = (E[]) new Object[10];
+		this(10);
 	}
 
 	public CircleQueue(int size) {
+		this.lenth=size > 0 ? size : 1;
 		arr = (E[]) new Object[size];
 	}
 	
@@ -149,7 +150,7 @@ public class CircleQueue<E> {
 
 }
  {% endhighlight %}
-
+另外，有网友说可以实现Iterable<T>接口，因为for each循环可以和任何实现了Iterable<E>接口的对象一起工作。
 
 </p>
 <p>{{ page.date | date_to_string }}</p>
