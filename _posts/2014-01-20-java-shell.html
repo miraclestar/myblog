@@ -1,0 +1,135 @@
+---
+layout: default
+title: java执行本地脚本的陷阱
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+最近写了个程序，需要用java调用shell脚本。
+于是就这么写了：
+{% highlight java %}
+public static String execCommand(String a) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			Runtime rt = Runtime.getRuntime();
+			Process proc = rt.exec(a);
+
+			InputStream stderr = proc.getInputStream();
+			InputStreamReader isr = new InputStreamReader(stderr);
+			BufferedReader br = new BufferedReader(isr);
+			String line = null;
+
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			int exitValue = proc.waitFor();
+			log.info(" exit value:" + exitValue);
+
+		} catch (Exception e) {
+			log.error("execute linux command error", e);
+		}
+		return sb.toString();
+	}
+ {% endhighlight %}
+ 在程序成功运行了一段时间后，发现程序hang住了。经过检查发现，是在调用脚本的地方hang住了。
+ 上网一搜发现这个东西还有不少问题，没有超时控制；如果执行的命令是坏的，java程序就会hang住等等。
+ 可以参考这个文章：<a href="http://www.javaworld.com/article/2071275/core-java/when-runtime-exec---won-t.html">when Runtime.exec() won't</a>
+ 还有这篇文章<a href="http://www.server110.com/shell/201311/3156.html">Java程序中如何调用shell脚本</a>
+ 最后附上上文中所说的代码，有超时控制：
+ {% highlight java %}
+ /**
+	 * cmd ,执行的shell命令
+	 * outTime，超时时间
+	 * @param cmd
+	 * @param outTime
+	 */
+	public static void executeCmd(String cmd, int outTime) {
+		ExecuteThread execThread = new ExecuteThread(cmd);
+		execThread.start();
+		try {
+			execThread.join(outTime);
+		} catch (InterruptedException e) {
+		} finally {
+			try {
+				execThread.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+	
+ {% endhighlight %}
+ 
+ {% highlight java %}
+package cstc.miracle.tool;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
+
+import org.apache.log4j.Logger;
+
+class ExecuteThread extends Thread {
+
+	private static Logger log = Logger.getLogger(ExecuteThread.class);
+	private volatile String cmdString;
+	private volatile Process process;
+	private volatile FileChannel inputChannel;
+
+	ExecuteThread(String cmd) {
+		this.cmdString = cmd;
+	}
+
+	public void run() {
+
+		//		String[] cmdArray = { "notepad.exe" };
+		String[] cmdArray = { "/bin/bash", "-c", cmdString };
+		ProcessBuilder builder = new ProcessBuilder(cmdArray);
+		try {
+			process = builder.start();
+
+			InputStream errorStream = process.getErrorStream();
+			if (errorStream instanceof FileInputStream) {
+				inputChannel = ((FileInputStream) errorStream).getChannel();
+			} else {
+				throw new Exception("errorStream error");
+			}
+	/* 以下的处理也可以用另一个线程来执行，这里放在同一个线程是使得在调用脚本出错(例如脚本文件被误删除)
+           迅速退出的情况下也能获取到相应的错误信息，避免ExecuteThread比读取输出线程结束得更快。
+ */
+			ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream(32);
+			ByteBuffer buffer = ByteBuffer.allocate(32);
+			WritableByteChannel channelOut = Channels.newChannel(byteArrayStream);
+			try {
+				while (inputChannel.read(buffer) > -1) {
+					buffer.flip();
+					channelOut.write(buffer);
+					buffer.clear();
+				}
+			} catch (IOException ioe) {
+				log.error("timeout");// 当脚本执行超时，由于channel的关闭必然会抛出异常
+			}
+			// 获取执行返回值
+			int exitCode = process.waitFor();
+			if (exitCode != 0) {
+				log.error("error when execute:" + cmdString);
+			} else {
+				log.info("execute success : " + cmdString);
+			}
+		} catch (Exception e) {
+			log.error("error when execute" + cmdString, e);
+		}
+	}
+
+	public void close() throws IOException {
+		process.destroy();
+		inputChannel.close();
+	}
+}
+ {% endhighlight %}
+</p>
+<p>{{ page.date | date_to_string }}</p>
