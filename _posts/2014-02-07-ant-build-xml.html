@@ -1,0 +1,116 @@
+---
+layout: default
+title: ant脚本配置自动部署到tomcat
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<p>
+<br />ant脚本配置自动部署到tomcat
+<br />找到<a href="http://www.cnblogs.com/GloriousOnion/archive/2012/12/18/2822817.html">这个blog</a>，挺详细的。
+<br />
+{% highlight java %}
+<project name="Ademo" default="redeploy" basedir=".">
+
+	<property name="appName" value="Ademo"/>
+<!-- Configure properties to access the Manager application -->
+	<property name="url" value="http://localhost:8888/manager" />
+	<property name="username" value="uploadwar" />
+	<property name="password" value="uploadwar" />
+	<property name="test.dir" value="testconfig" />
+	
+<!-- Configure the directory into which the web application is built -->
+<property name="build" value="${basedir}/WebContent/WEB-INF/classes" />
+<property name="dist.dir" value="${basedir}/dist" />
+
+<!-- Configure the context path for this application -->
+<property name="path" value="/${appName}" />
+<property name="src.dir" value="src"/>
+<property name="lib.dir" value="WebContent/WEB-INF/lib"/>
+<property name="dist.dir" value="dist"/>
+<property name="classes.dir" value="WebContent/WEB-INF/classes"/>
+
+
+<!-- Configure the custom Ant tasks for the Manager application -->
+    <target name="_def_tomcat_tasks">           
+        <!-- tasks: deploy,undeploy,reload,stop,start,list,roles,resources -->          
+        <taskdef name="deploy"    classname="org.apache.catalina.ant.DeployTask" />           
+        <taskdef name="list"      classname="org.apache.catalina.ant.ListTask" />           
+        <taskdef name="reload"    classname="org.apache.catalina.ant.ReloadTask" />           
+        <taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask" />  
+        <taskdef name="roles"     classname="org.apache.catalina.ant.RolesTask" />           
+        <taskdef name="start"     classname="org.apache.catalina.ant.StartTask" />          
+        <taskdef name="stop"      classname="org.apache.catalina.ant.StopTask" />           
+        <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask" />   
+</target> 
+ 
+<!-- Executable Targets -->
+	<!-- Compilation Classpath 路径设置 -->
+	<path id="compile.classpath">
+		<pathelement location="${classes.dir}"/>
+		<fileset dir="${lib.dir}" includes="**/*.jar" />  	
+	</path>
+	
+	<!-- Clean Target 删除先前的目录结构 -->
+	<target name="clean" description="Delete old build and dist directories">
+		<delete dir="${classes.dir}"/>
+		<delete dir="${dist.dir}/*.war"/>
+	</target>
+	
+	<!-- Prepare Target 建立打包的目的目录结构 -->
+	<target name="prepare" depends="clean">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+	
+<target name="compile"  depends="prepare"  description="WebSip manage">
+	<javac srcdir="${src.dir}" destdir="${classes.dir}" encoding="gbk" debug="true" debuglevel="source,lines,vars"  includeantruntime="on">
+		<classpath refid="compile.classpath"/>
+	</javac>
+    <mkdir dir="${dist.dir}"/> 
+	<delete file="${classes.dir}/*.xml"/>
+	<delete file="${classes.dir}/*.properties"/>
+	<copy todir="${classes.dir}">
+		<fileset dir="${test.dir}">
+			<exclude name="*.svn"/>
+			<exclude name="*.war"/>
+			<include name="**/*.xml"/>
+            <include name="**/*.properties" />
+		</fileset>
+	</copy>
+    <war destfile="${dist.dir}/${appName}.war" webxml="WebContent/WEB-INF/web.xml">
+        <classes dir="WebContent/WEB-INF/classes" />
+         <fileset dir="WebContent" excludes="WEB-INF/**" />
+         <lib dir="WebContent/WEB-INF/lib" />
+    </war>
+</target>
+ 
+<target name="redeploy" description="Remove and Install web application" >   
+    <antcall target="undeploy"/>   
+    <antcall target="deploy"/>   
+</target> 
+    
+<target name="deploy" description="Install web application" depends="compile,_def_tomcat_tasks">
+    <deploy url="${url}" username="${username}" password="${password}" path="${path}" update="true" war="${dist.dir}/${appName}.war" />
+</target>
+ 
+<target name="undeploy" description="Remove web application" depends="_def_tomcat_tasks">
+    <undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
+</target>
+    
+<target name="reload" description="Reload web application" depends="compile,_def_tomcat_tasks">     
+    <reload  url="${url}" username="${username}" password="${password}" path="${path}"/>  
+</target> 
+    
+</project>
+ {% endhighlight %}
+ <br />
+ 参考资料：<br />
+ <a href="http://tomcat.apache.org/tomcat-5.5-doc/manager-howto.html">Tomcat5.5 Executing Manager Commands With Ant</a><br />
+ <a href="http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html">Tomcat7.0 Executing Manager Commands With Ant</a><br />
+ tomcat6和7的配置稍有不同的，<br />
+ 1、ant脚本中url属性，7.0的要加text， <property name="url"      value="http://localhost:8080/manager/text"/>；<br />
+ 2、tomcat配置的用户权限也不一样：<user username="uploadwar" password="uploadwar" roles="manager-script,admin-script"/>；<br />
+ 3、catalina-ant.jar也不一样。不同的版本要用不一样的jar！<br />
+ 
+</p>
+<p>{{ page.date | date_to_string }}</p>
