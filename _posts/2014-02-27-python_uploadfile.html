@@ -1,0 +1,177 @@
+---
+layout: default
+title: python模拟http上传文件
+category: tech
+---
+<h2>{{ page.title }}</h2>
+
+网上找了好几个python模拟http上传文件的例子都不好使，最后看到<a href="http://malware-lu.googlecode.com/git/tools/virustotal.py">这个</a>，改了下放这里吧，以便日后查阅。
+
+{% highlight python %}
+import httplib
+import mimetypes
+
+def post_multipart(host, selector, fields, files):
+    content_type, body = encode_multipart_formdata(fields, files)
+    h = httplib.HTTP(host)
+    h.putrequest('POST', selector)
+    h.putheader('content-type', content_type)
+    h.putheader('content-length', str(len(body)))
+    h.endheaders()
+    h.send(body)
+    errcode, errmsg, headers = h.getreply()
+    return h.file.read()
+
+def encode_multipart_formdata(fields, files):
+    LIMIT = '----------lImIt_of_THE_fIle_eW_$'
+    CRLF = '\r\n'
+    L = []
+    for (key, value) in fields:
+        L.append('--' + LIMIT)
+        L.append('Content-Disposition: form-data; name="%s"' % key)
+        L.append('')
+        L.append(value)
+    for (key, filename, value) in files:
+        L.append('--' + LIMIT)
+        L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
+        L.append('Content-Type: %s' % get_content_type(filename))
+        L.append('')
+        L.append(value)
+    L.append('--' + LIMIT + '--')
+    L.append('')
+    body = CRLF.join(L)
+    content_type = 'multipart/form-data; boundary=%s' % LIMIT
+    return content_type, body
+
+def get_content_type(filename):
+    return mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+
+def upload(filename):
+    host = "127.0.0.1"
+    selector = "https://127.0.0.1/test/TestPost?hn=123"
+    fields = [("","")]
+    file_to_send = open(filename, "rb").read()
+    files = [("file", filename, file_to_send)]
+    result = post_multipart(host, selector, fields, files)
+    return result
+
+print(upload("/home/miracle/testfile"));
+{% endhighlight %}
+
+还有服务器端的java上传接收文件的代码，也一并放这里了，用了commons-upload包，需要依赖commons-io包。
+
+/**
+ * 
+ * 接收文件
+ * @author hyliu
+ *
+ */
+public class ScanPost extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static Logger log = Logger.getLogger(ScanPost.class);
+	private static final String path = System.getProperty("user.home") + "/received/";
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String hostname = request.getParameter("hn");
+		String fn = request.getParameter("fn");
+		log.info("hostname:" + hostname + ",filename:" + fn + ",path:" + path);
+		String fileName = fn + ".gz";
+		JSONObject ret = new JSONObject();
+		int result = 1;
+		PrintWriter out = response.getWriter();
+
+		//		Enumeration<?> headers = request.getHeaderNames();
+		//		String head = "";
+		//		while (headers.hasMoreElements())
+		//		{
+		//			head = headers.nextElement().toString();
+		//			log.debug(head + ":" + request.getHeader(head));
+		//		}
+
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
+		log.info("is file : " + isMultipart);
+		if (isMultipart) {
+			DiskFileItemFactory factory = new DiskFileItemFactory();
+
+			ServletContext servletContext = this.getServletConfig().getServletContext();
+			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+			factory.setRepository(repository);
+			log.debug("repository: " + repository);
+
+			ServletFileUpload upload = new ServletFileUpload(factory);
+
+			try {
+				List<org.apache.commons.fileupload.FileItem> items = upload.parseRequest(request);
+				Iterator<FileItem> iter = items.iterator();
+				while (iter.hasNext()) {
+					FileItem item = iter.next();
+					if (!item.isFormField()) {
+						processUploadedFile(item, fileName);
+					}
+				}
+			} catch (FileUploadException e) {
+				log.error("upload error;", e);
+			}
+			String md5 = MD5Util.getFileMD5String(new File(path + fileName));
+			String[] fnArray = fn.split("_");
+			String paramHostname = fnArray[0];
+			String clientFileMd5 = fnArray[1];
+			int hdNum = Integer.parseInt(fnArray[2]);
+
+			if (!md5.equals(clientFileMd5) || !paramHostname.equals(hostname)) {
+				log.warn("hostname:" + hostname + ",param hostname:" + paramHostname + ",md5:" + md5 + ",clientMd5:" + clientFileMd5);
+				result = 0;
+			} else {
+				updateDB(hostname, hdNum);
+			}
+
+			try {
+				ret.put("res", result);
+			} catch (JSONException e) {
+				log.error("json object put error;", e);
+			}
+
+			out.print(ret.toString());
+
+		} else {
+			try {
+				ret.put("res", -1);
+			} catch (JSONException e) {
+				log.error("json object put error;", e);
+			}
+			out.print(ret.toString());
+		}
+		log.info("filename" + fileName + ", ret:" + ret.toString());
+		out.flush();
+		out.close();
+	}
+
+	private void processUploadedFile(FileItem item, String fn) {
+		File uploadedDir = new File(path);
+		if (!uploadedDir.exists()) {
+			uploadedDir.mkdirs();
+		}
+		File uploadedFile = new File(path + fn);
+		try {
+			item.write(uploadedFile);
+		} catch (Exception e) {
+			log.error("write file error;", e);
+		}
+	}
+
+	private void updateDB(String hostname, int hdNum) {
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.doGet(request, response);
+	}
+
+
+}
+
+
+
+
+<p>{{ page.date | date_to_string }}</p>
