@@ -1,0 +1,140 @@
+---
+layout: default
+title: mbl用flexget结合transmission实现RSS订阅下载
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<br />家里的下载机MBL，无法远程登录，有时候在公司看到好的电影想马上下载，晚上回家看。
+<br />经过研究，有这几种方案：
+
+<ul>
+	<li>用花生壳之类的软件搞个域名，访问自己家里，不过电信不允许个人搞服务，所以禁掉了；不过可以破解电信光猫来实现；</li>
+	<li>家里定时访问PT站点RSS，其实就是装个flexget；</li>
+	<li>或者用chd提供的方法，更简单的，可以试试，见末尾，这种我没测试。</li>
+</ul>
+
+<br />破解电信光猫，也看了很多方法，不过我家这个是新的光猫，网上那些方法都破不了！
+<br />ok，那就flexget那种方法。过程是曲折的，前途是光明的，功夫不负有心人，在我坚持不懈的努力下，终于搞定了！
+<br />其实说白了，就是装个软件而已。为啥被我说的这么难。因为mbl是阉割版的linux！不是什么软件都装的上的。
+<br />开始搜的汉语的关键词，没找到靠谱的。后来，在国外一个网站http://mybookworld.wikidot.com/forum/t-406796看到有人说，在facebook写了教程，
+<br />于是搜了一把英文：Install flexget on MyBook Live.。google结果第一个居然是flexget官方的，点进入：
+<br />http://flexget.com/ticket/1579
+<br />官方这安装还是比较靠谱的。不过不够详细，中间还是碰到很多坑。
+<br />
+<br />我翻译下吧，有删改：
+<br />首先安装ipkg，可以安装各种专门为mbl打造的安装包；
+<br />命令：<span style="background-color: #00ff00">wget http://mybookworld.wikidot.com/local--files/optware/setup-mybooklive.sh </span>
+<br />然后执行：<span style="background-color: #00ff00">sh setup-mybooklive.sh</span>
+<br />稍等下就ok了，然后执行：<span style="background-color: #00ff00">python -V</span> 看看python版本，如果是2.6或者2.7就不用安装python26了。
+<br />命令：<span style="background-color: #00ff00">/opt/bin/ipkg install python26</span> 安装python26
+<br />接着安装easy_install，命令：<span style="background-color: #00ff00"> ipkg install py26-setuptools</span>
+<br />接着，编辑文件/opt/lib/python2.6/distutils/distutils.cfg，执行命令：<span style="background-color: #00ff00">nano /opt/lib/python2.6/distutils/distutils.cfg</span>编辑成如下：
+{% highlight python %}
+
+[install]
+prefix = /opt/local
+
+[easy_install]
+site-dirs  = /opt/local/lib/python2.6/site-packages
+{% endhighlight %}
+<br />因为tmp文件夹不够用，直接安装flexget会报错磁盘满，新建个tmp2文件夹。
+<br />依次执行命令：
+<span style="background-color: #00ff00">mkdir /tmp2
+<br />TEMP=/tmp2 easy_install Flexget</span>
+<br />安装FlexGet的时候可能会出很多错，多执行几次直到没有错误，tips：如果实在装不上就单独装卡在那的那个包（easy_install 卡住的那个包）；
+<br />国外的网站，网络可能不太好，多试几次。我是试了好几个小时才好的（中间吃了个饭O(∩_∩)O）！
+<br />然后看看flexget在哪个目录：<span style="background-color: #00ff00">find / -name flexget -type f 2>/dev/null</span>
+<br />一般会是这个目录下： /opt/local/bin/flexget
+<br />然后命令：<span style="background-color: #00ff00">crontab -e</span>
+<br />编辑添加：*/30 * * * * /opt/local/bin/flexget execute --cron
+<br />表示30分钟查看一次rss订阅有没有新的；
+<br />把flexget目录改到当前目录：
+<span style="background-color: #00ff00">mkdir /DataVolume/shares/Public/flexget
+ln -s /DataVolume/shares/Public/flexget /root/.flexget
+</span>
+<br />然后要安装transmissionrpc：<span style="background-color: #00ff00">easy_install transmissionrpc</span>
+<br />然后可以运行下flexget试试：<span style="background-color: #00ff00">/opt/local/bin/flexget execute </span>
+<br />接着执行命令：
+<span style="background-color: #00ff00">cd ~/.flexget/
+vi config.yml
+</span>
+{% highlight python %}
+tasks:
+  my task:
+    rss: http://chdbits.org/torrentrss.php?myrss=1******* #这是pt站点提供的rss地址
+    series:
+      - Rock
+    download: /shares/Public/WWW
+    accept_all: yes    #这一行绝对不能丢！开始一直不成功就是这个搞的
+    transmission:
+      host: 127.0.0.1 #这里需要在transmission里配置好
+      port: 9091
+      username: miracleliu
+      password: "123456"  #如果全是数字要加引号！
+{% endhighlight %}
+
+<br />flexget搞定了，这还不算完，还有transmission；
+<br />先把tr停了：<span style="background-color: #00ff00">/etc/init.d/transmission-daemon stop</span>
+<br />修改文件：<span style="background-color: #00ff00">vi /root/.config/transmission-daemon/setting.json</span>
+<br />修改为
+{% highlight python %}
+……
+  "rpc-whitelist": "127.0.0.1,localhost,192.168.*.*",
+   "rpc-whitelist-enabled": true,
+……
+{% endhighlight %}
+<br />再启动tr：<span style="background-color: #00ff00">/etc/init.d/transmission-daemon start</span>
+<br />done！试试在chd订阅一个，执行下<span style="background-color: #00ff00">/opt/local/bin/flexget execute</span>，或者等30分钟就会有下载了。
+<br />试了3个，有个种子一直不成功，是种子的链接不太稳定，下载一直超时，另外2个都成功下载了。
+<hr /><hr />
+<br /><br /><br />搞定了flexget然后！我在chd看到了这个！简单很多的方法！
+	{% highlight python %}
+四、对于RRS下载在 Transmission 客户端的使用方法（感谢热心网友 ElviN 提供！）
+
+transmission设置文件settings.json增加／修改以下三项：
+"watch-dir": "/whatever/watch", 
+"watch-dir-enabled": true,
+"trash-original-torrent-files": true,
+保存，启动transmission
+注意，要先停止transmission再修改保存。
+
+需要python2.4以上；
+下载feedparser: http://code.google.com/p/feedparser/
+下载RSSDler: http://code.google.com/p/rssdler/
+分别解压缩；
+分别进入解压生成的目录，以root权限执行：
+python setup.py install
+
+建立工作目录：
+~/.rssdler
+创建config.txt文件，以下是我的，很简单：
+
+[global]
+urllib = true
+
+scanMins = 15 
+minSize = 0
+maxSize = 0
+
+log = 1
+logFile = downloads.log
+verbose = 0
+
+runOnce = False
+saveFile = savedstate.dat
+
+[CHDbits]
+link = http://chdbits.org/torrentrss.php?myrss=1&linktype=dl&uid=yyyyyy&passkey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+active = true
+directory = /whatever/watch
+
+保存，后台运行rssdler：
+rssdler -d
+
+其中link = 那一串换成你自己的。
+{% endhighlight %}
+<hr /><hr />
+后面的这种方法我没试过，本来就应该这么简单才对，我甚至都想自己写一个了，只是一个crontab定时解析rss然后下载种子，接着传给TR就完了。
+
+
+<p>{{ page.date | date_to_string }}</p>
