@@ -1,0 +1,42 @@
+---
+layout: default
+title: 最近看到的一些牛逼技术
+category: tech
+---
+<h2>{{ page.title }}</h2>
+<br />
+有些可能是比较老的技术，对我来说都是新的，其中有些技术在下一期的工作中可能要用到，要好好学习下。<br />
+<br />
+bloomfilter:一种快速查找算法，效率超高，可以快速在一大堆数据中，发现某个数据是否存在。不过有错误率的。在容错的情况可以考虑。<br />
+<a href="http://zh.wikipedia.org/zh-cn/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8">wikipedia</a><br />
+http://www.cnblogs.com/heaad/archive/2011/01/02/1924195.html<br />
+http://billmill.org/bloomfilter-tutorial/（不错的文章，简单明了，抽空翻译）<br />
+<br />
+guava: google的一些对java的改进库，比如collection，cache等等，也有bloomfilter的实现。<br />
+https://code.google.com/p/guava-libraries/<br />
+教程：http://ifeve.com/google-guava/<br />
+<br />
+<br />
+disruptor:它能够在一个线程里每秒处理6百万订单，看这个简直牛逼大了<br />
+https://github.com/LMAX-Exchange/disruptor<br />
+http://ifeve.com/disruptor/<br />
+http://lmax-exchange.github.io/disruptor/<br />
+http://webcache.googleusercontent.com/search?q=cache:CyYlkmOZbqAJ:www.slideshare.net/trishagee/introduction-to-the-disruptor+&cd=1&hl=zh-CN&ct=clnk&gl=cn<br />
+https://github.com/LMAX-Exchange/disruptor/wiki/Getting-Started （待翻）<br />
+<br />
+<br />
+<br />
+一致性hash<br />
+http://langyu.iteye.com/blog/684087<br />
+https://github.com/dustin/java-memcached-client<br />
+https://github.com/RJ/ketama<br />
+http://www.akamai.com/dl/technical_publications/ConsistenHashingandRandomTreesDistributedCachingprotocolsforrelievingHotSpotsontheworldwideweb.pdf<br />
+http://www.codeproject.com/Articles/56138/Consistent-hashing<br />
+php实现：<br />
+http://blog.csdn.net/mayongzhan/article/details/4298834<br />
+
+
+
+
+
+<p>{{ page.date | date_to_string }}</p>
