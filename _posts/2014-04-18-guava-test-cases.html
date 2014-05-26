@@ -1,0 +1,337 @@
+---
+layout: default
+title: Guava学习的一点东西
+category: tech
+---
+<h2>{{ page.title }}</h2>
+
+guava还是很先进的，有些东西java8中才会有的，guava中早就应用了，比如Lists.newXXXX;
+guava中fluent格式，让我觉得不习惯，虽然的确是省了很多单词。
+
+作为一个工具，最需要知道怎么用。是不是好用，只有用了才知道。所以我就用了下，见下面的代码了
+其实写的都是测试用例；注释里面有一些介绍说明；
+
+{% highlight java %}
+//guava中的新集合类：
+public class GuavaNewCollections {
+
+	/**
+	 * 2个很好的教程
+	 * http://www.ibm.com/developerworks/cn/java/j-lo-googlecollection/#ibm-pcon
+	 * http://ifeve.com/google-guava-newcollectiontypes/
+	 */
+	private static Logger log = Logger.getLogger(GuavaNewCollections.class);
+
+	static final String[] testString = new String[] { "a", "b", "c", "a", "a", "b" };
+
+	@Test
+	public void newGuavaCollections() {
+		String test = null;
+		log.debug(Objects.equal(test, "ab"));// 用Objects可以不用判断对象是否为空。
+
+		ObjectsCase oc = new ObjectsCase();
+		oc.setParam(123);
+		System.out.println(oc.toString());// guava带的toString工具类
+
+		/****
+		 * 
+		 * multi,可以用来计数，某个字符串出现了多少次等等；
+		 * 
+		 * ******************/
+		Multiset<String> multiSet = HashMultiset.create();
+		Multiset<String> multiSet2 = TreeMultiset.create();
+		Multiset<String> multiSet4 = LinkedHashMultiset.create();
+		Multiset<String> multiSet3 = ConcurrentHashMultiset.create();
+
+		multiSet.addAll(Arrays.asList(testString));
+
+		multiSet.add("a", 3);
+		multiSet.add("d", 4);
+		multiSet.remove("a", 8);// 减少计数；
+		for (String s : multiSet.elementSet()) {
+			log.debug(s + " count:" + multiSet.count(s));
+		}
+		/**********************/
+
+		/*****
+		 * multiMap 一个key可以对应多个value；
+		 * ListMultimap.get(key)返回List，SetMultimap.get(key)返回Set。
+		 * 
+		 * Muitimap 接口的主要实现类有： HashMultimap: key 放在 HashMap，而 value 放在
+		 * HashSet，即一个 key 对应的 value 不可重复 ArrayListMultimap: key 放在 HashMap，而
+		 * value 放在 ArrayList，即一个 key 对应的 value 有顺序可重复 LinkedHashMultimap: key
+		 * 放在 LinkedHashMap，而 value 放在 LinkedHashSet，即一个 key 对应的 value 有顺序不可重复
+		 * TreeMultimap: key 放在 TreeMap，而 value 放在 TreeSet，即一个 key 对应的 value
+		 * 有排列顺序 ImmutableMultimap: 不可修改的 Multimap
+		 */
+		Multimap<String, String> myMultimap = ArrayListMultimap.create();
+		for (String t : testString) {
+			myMultimap.put(t, t + "-v");
+		}
+		log.debug("myMultimap size:" + myMultimap.size());
+		log.debug(myMultimap.get("a"));
+		log.debug(myMultimap.get("b"));
+		log.debug(myMultimap.get("d"));
+		for (String v : myMultimap.values()) {
+			log.debug(v);
+		}
+		Collection<String> vl = myMultimap.get("a");// 返回Collection
+		
+		HashMultimap.create();
+
+		/**
+		 * BiMap 实现了 java.util.Map 接口。它的特点是它的 value 和它 key 一样也是不可重复的，换句话说它的 key
+		 * 和 value 是等价的。如果你往 BiMap 的 value 里面放了重复的元素，就会得到
+		 * IllegalArgumentException。 BiMap的常用实现有： HashBiMap: key 集合与 value 集合都有
+		 * HashMap 实现 EnumBiMap: key 与 value 都必须是 enum 类型 ImmutableBiMap: 不可修改的
+		 * BiMap
+		 */
+		BiMap<String, String> biMap = HashBiMap.create();
+		for (String t : testString) {
+			biMap.put(t, t + "-v");
+		}
+		log.debug("bimap get a-v:" + biMap.inverse().get("a-v"));
+
+		/**
+		 * 当你想使用多个键做索引的时候，你可能会用类似Map<FirstName, Map<LastName,Person>>
+		 * 的实现，这种方式很丑陋，使用上也不友好。Guava为此提供了新集合类型Table，它有两个支持所有类型的键：”行”和”列”
+		 * HashBasedTable：本质上用HashMap<R, HashMap<C, V>>实现；
+		 * TreeBasedTable：本质上用TreeMap<R, TreeMap<C,V>>实现；
+		 * ImmutableTable：本质上用ImmutableMap<R, ImmutableMap<C,
+		 * V>>实现；注：ImmutableTable对稀疏或密集的数据集都有优化。
+		 * ArrayTable：要求在构造时就指定行和列的大小，本质上由一个二维数组实现
+		 * ，以提升访问速度和密集Table的内存利用率。ArrayTable与其他Table的工作原理有点不同，请参见Javadoc了解详情。
+		 */
+		Table<Integer, Integer, Integer> weightedGraph = HashBasedTable.create();
+		weightedGraph.put(1, 1, 4);
+		weightedGraph.put(2, 2, 20);
+		weightedGraph.put(2, 3, 23);
+		weightedGraph.put(3, 3, 5);
+
+		Map<Integer, Integer> row2 = weightedGraph.row(2); // returns a Map
+															// mapping v2 to 4,
+															// v3 to 20
+		log.debug("row2 ,3:" + row2.get(3));
+
+		log.debug("colum 3 3:" + weightedGraph.column(3).get(3)); // returns a
+																	// Map
+																	// mapping
+																	// v1 to 20,
+																	// v2 to 5
+		/**
+		 * RangeSet,挺有意思，和数学里的集合定义更接近了；
+		 * RangeSet描述了一组不相连的、非空的区间。当把一个区间添加到可变的RangeSet时，所有相连的区间会被合并，空区间会被忽略。
+		 * 注：RangeSet不支持GWT，也不支持JDK5和更早版本；因为，RangeSet需要充分利用JDK6中NavigableMap的特性。
+		 */
+		RangeSet<Integer> rangeSet = TreeRangeSet.create();
+		rangeSet.add(Range.closed(1, 10)); // {[1,10]}
+		rangeSet.add(Range.closedOpen(11, 15));// 添加[11,15],得到不相连区间:{[1,10],
+												// [11,15)}
+		rangeSet.add(Range.closedOpen(15, 20)); // 添加[15,20],相连区间; {[1,10],
+												// [11,20)}
+		rangeSet.add(Range.openClosed(0, 0)); // 空区间; {[1,10], [11,20)}
+		rangeSet.remove(Range.open(5, 10)); // 分割[1, 10]; {[1,5], [10,10],
+											// [11,20)}
+		/**
+		 * RangeMap
+		 * RangeMap描述了"不相交的、非空的区间"到特定值的映射。和RangeSet不同，RangeMap不会合并相邻的映射，
+		 * 即便相邻的区间映射到相同的值。
+		 */
+		RangeMap<Integer, String> rangeMap = TreeRangeMap.create();
+		rangeMap.put(Range.closed(1, 10), "foo"); // {[1,10] => "foo"}
+		rangeMap.put(Range.open(3, 6), "bar"); // {[1,3] => "foo", (3,6) =>
+												// "bar", [6,10] => "foo"}
+		rangeMap.put(Range.open(10, 20), "foo"); // {[1,3] => "foo", (3,6) =>
+													// "bar", [6,10] => "foo",
+													// (10,20) => "foo"}
+		rangeMap.remove(Range.closed(5, 11)); // {[1,3] => "foo", (3,5) =>
+												// "bar", (11,20) => "foo"}
+
+	}
+}
+{% endhighlight %}
+{% highlight java %}
+//guava集合中的新方法
+
+public class GuavaCollectionsUtils {
+
+	/**
+	 * http://ifeve.com/google-guava-collectionutilities/
+	 * 提供java.util.Collections中没有的集合工具
+	 */
+	@Test
+	public void test() {
+		/**
+		 * jdk提供的创建集合 List<TypeThatsTooLongForItsOwnGood> list = new
+		 * ArrayList<TypeThatsTooLongForItsOwnGood>();
+		 */
+		// guava提供的创建集合的方式
+		List<String> list = Lists.newArrayList();
+		Map<String, Object> map = Maps.newLinkedHashMap();
+		List<String> theseElements = Lists.newArrayList("alpha", "beta", "gamma");
+		Set<String> createSet = Sets.newHashSet("ste", "haha");
+		/**
+		 * 本来以为expectedSize或者Capacity是限定长度的，其实没有，只是限定初始化的长度；
+		 */
+		List<String> exactly100 = Lists.newArrayListWithCapacity(100);
+		List<String> approx100 = Lists.newArrayListWithExpectedSize(100);
+		Set<String> approx100Set = Sets.newHashSetWithExpectedSize(100);
+
+		for (int i = 0; i < 111; i++) {
+			exactly100.add(i + "");
+			approx100.add(i + "");
+			approx100Set.add(i + "");
+		}
+		for (String a : exactly100) {
+			System.out.print(a + ",");
+		}
+		System.out.println();
+		for (String a : approx100) {
+			System.out.print(a + ",");
+		}
+		System.out.println();
+		List<String> ss = Lists.newArrayList(approx100Set);
+
+		/**
+		 * 和java里带的Collection是兼容的
+		 */
+		Collections.sort(ss);
+
+		for (String a : ss) {
+			System.out.print(a + ",");
+		}
+		System.out.println();
+		/**
+		 * immutable意思是不可变的；下面这几个Immutable开头的集合都是不可变的。在初始化的时候就确定了里面的内容，不会变了。
+		 * sets的带的方法也不错 ，求交集intersection返回的是一个SetView，并集是用union，意思也更准确
+		 * jdk里带的是set.retainAll(c)修改了set内容;
+		 */
+
+		Set<String> wordsWithPrimeLength = ImmutableSet.of("one", "two", "three", "six", "seven", "eight");
+
+		Set<String> primes = ImmutableSet.of("two", "three", "five", "seven");
+		SetView<String> intersection = Sets.intersection(primes, wordsWithPrimeLength);// 交集
+		// intersection包含"two", "three", "seven"
+		for (String s : intersection) {
+			System.out.print(s + ",");
+		}
+
+		System.out.println();
+
+		SetView<String> view = Sets.union(primes, wordsWithPrimeLength);// 并集
+
+		for (String s : view) {
+			System.out.print(s + ",");
+		}
+
+		System.out.println();
+	}
+}
+
+
+{% endhighlight %}
+
+
+{% highlight java %}
+//guava中的缓存，说实话，个人感觉不好用。
+package com.miracle.guava;
+
+public class GuavaCache {
+
+	@Test
+	public void TestLoadingCache() throws Exception {
+		/**
+		 * 
+		 * http://ifeve.com/google-guava-cachesexplained/
+		 * 
+		 * 通常来说，Guava Cache适用于：
+		 * 
+		 * 你愿意消耗一些内存空间来提升速度。 你预料到某些键会被查询一次以上。 缓存中存放的数据总量不会超出内存容量。（Guava
+		 * Cache是单个应用运行时的本地缓存。它不把数据存放到文件或外部服务器。如果这不符合你的需求，请尝试Memcached这类工具）
+		 * 如果你的场景符合上述的每一条，Guava Cache就适合你。
+		 * 
+		 * 如同范例代码展示的一样，Cache实例通过CacheBuilder生成器模式获取，但是自定义你的缓存才是最有趣的部分。
+		 * 
+		 * 注：如果你不需要Cache中的特性，使用ConcurrentHashMap有更好的内存效率——
+		 * 但Cache的大多数特性都很难基于旧有的ConcurrentMap复制，甚至根本不可能做到。
+		 * 
+		 * 
+		 */
+		LoadingCache<String, String> cahceBuilder = CacheBuilder.newBuilder().build(new CacheLoader<String, String>() {
+			@Override
+			public String load(String key) throws Exception {
+				String strProValue = "hello " + key + "!";
+				return strProValue;
+			}
+		});
+
+		System.out.println("jerry value:" + cahceBuilder.apply("jerry"));
+		System.out.println("jerry value:" + cahceBuilder.get("jerry"));
+		System.out.println("peida value:" + cahceBuilder.get("peida"));
+		System.out.println("lisa value:" + cahceBuilder.apply("lisa"));
+		cahceBuilder.put("harry", "ssdded");
+		System.out.println("harry value:" + cahceBuilder.get("harry"));
+
+		/**
+		 * 一个残酷的现实是，我们几乎一定没有足够的内存缓存所有数据。你你必须决定：什么时候某个缓存项就不值得保留了？Guava
+		 * Cache提供了三种基本的缓存回收方式：基于容量回收、定时回收和基于引用回收
+		 */
+		LoadingCache<String, String> cacheBuilder2 = CacheBuilder.newBuilder().maximumSize(2).expireAfterWrite(1, TimeUnit.SECONDS)
+				.build(new CacheLoader<String, String>() {
+					@Override
+					public String load(String key) throws Exception {
+						String strProValue = "go " + key + "!";
+						return strProValue;
+					}
+				});
+
+		cacheBuilder2.put("beijing", "go beijing!");
+
+		/**
+		 * 如果你要的数据，缓存中没有，可以调用一个Callable来生成。
+		 */
+		System.out.println(cacheBuilder2.get("1"));
+		System.out.println(cacheBuilder2.get("2"));
+		System.out.println(cacheBuilder2.get("3"));
+		System.out.println(cacheBuilder2.get("abc", new Callable<String>() {
+			public String call() {
+				return "I'm generated abc!";
+			}
+		}));
+		System.out.println(cacheBuilder2.get("beijing"));
+		System.out.println(cacheBuilder2.get("abc"));
+
+		TimeUnit.SECONDS.sleep(2);
+
+		System.out.println(cacheBuilder2.get("1"));
+
+
+	}
+
+	@Test
+	public void testcallableCache() throws Exception {
+		Cache<String, String> cache = CacheBuilder.newBuilder().maximumSize(1000).build();
+		String resultVal = cache.get("jerry", new Callable<String>() {
+			public String call() {
+				String strProValue = "hello " + "jerry" + "!";
+				return strProValue;
+			}
+		});
+		System.out.println("jerry value : " + resultVal);
+
+		resultVal = cache.get("peida", new Callable<String>() {
+			public String call() {
+				String strProValue = "hello " + "peida" + "!";
+				return strProValue;
+			}
+		});
+		System.out.println("peida value : " + resultVal);
+	}
+
+}
+
+{% endhighlight %}
+
+
+
+<p>{{ page.date | date_to_string }}</p>
