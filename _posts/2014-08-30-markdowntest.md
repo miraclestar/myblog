@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 用sql语句做简单的数据统计
+title: markdownTest
 category: tech
 ---
 ##{{ page.title }}
