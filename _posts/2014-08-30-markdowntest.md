@@ -14,7 +14,7 @@ category: tech
 + c
 this is a [link](http://www.baidu.com "title baidu link")
 
-[testjpg]: /images/test.jpg "picture"
+![testjpg][/images/test.jpg "picture"]
 
 java:
 
