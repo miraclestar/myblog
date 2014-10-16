@@ -1,7 +1,7 @@
 ---
 layout: default
 title: markdownTest
-category: tech
+category: tech1
 ---
 ##{{ page.title }}
 
@@ -14,7 +14,7 @@ category: tech
 + c
 this is a [link](http://www.baidu.com "title baidu link")
 
-![12](/images/test.jpg "picture")
+![12](/images/test1.jpg "picture")
 
 java:
 
