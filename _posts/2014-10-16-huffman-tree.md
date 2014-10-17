@@ -11,8 +11,9 @@ category: tech
 
 + 首先要普及下ip知识，ip库一般是这样的格式：
 >ip/mask isp
->123.123.123.123/23 上海电信
->12.23.123.1/24 北京网通
+>##123.123.123.123/23 上海电信
+>##12.23.123.1/24 北京网通
+
 ip其实是32位二进制数表示的；
 IP地址中间用点号隔开的4个十进制数，每个数取值范围是0—255，也就是256个数，是2的8次方，用2进制表示即为8位，整个ip即为32位二进制。
 后面那个mask是子网掩码；表示一个子网；23表示23个1；ip和mask做“与”运算，得到的值相同那么2个ip段就是一个子网；
@@ -24,14 +25,14 @@ IP地址中间用点号隔开的4个十进制数，每个数取值范围是0—2
 
 代码只写了怎么创建树，待日后再写从库里查询，其实就是顺藤摸瓜，就简单了；
 代码先贴上，供大家参考，欢迎讨论:
-`
-import java.util.HashSet;
-import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+    import java.util.HashSet;
+    import java.util.Set;
 
-public class HuffmanIp {
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+
+    public class HuffmanIp {
 
     private static Logger log = LoggerFactory.getLogger(HuffmanIp.class);
 

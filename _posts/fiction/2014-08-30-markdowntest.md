@@ -14,7 +14,7 @@ category: fiction
 + c
 this is a [link](http://www.baidu.com "title baidu link")
 
-![12](/images/test1.jpg "picture")
+![12](/images/test.jpg "picture")
 
 java:
 
