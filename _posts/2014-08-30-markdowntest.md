@@ -1,7 +1,7 @@
 ---
 layout: default
 title: markdownTest
-category: tech1
+category: fiction
 ---
 ##{{ page.title }}
 
