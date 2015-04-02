@@ -5,13 +5,14 @@ category: tech
 ---
 ##{{ page.title }}
 最近一直挺忙(lan)的，也没心思写东西；
-把最近工作中用到的一个东东介绍一下吧；
+今儿个，把工作中用到的一个东东介绍一下吧；
 HttpAsyncClient，就是这个，官网地址：[link](http://hc.apache.org/httpcomponents-asyncclient-4.0.x/index.html)
 为什么用这个客户端工具，而不用httpclient？
 官方是这么说的：
 Designed for extension while providing **robust** support for the base HTTP protocol, 
 HttpAsyncClient may be of interest to anyone building HTTP-aware client applications based on asynchronous, event driven I/O model.
 这个是异步事件驱动模型来做的，简单来说就是性能高！至于有多高？我做了个测试；
+
 见图：![12](/images/httpclient/client.png "picture")
 
 程序员还是看代码比较直观：
@@ -67,7 +68,7 @@ HttpAsyncClient may be of interest to anyone building HTTP-aware client applicat
                 PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor);
                 connManager.setDefaultMaxPerRoute(100);
                 // connManager.setMaxPerRoute(new HttpRoute(new HttpHost("a.sina.com", 80)), 100);
-                connManager.setMaxPerRoute(new HttpRoute(new HttpHost("10.1.9.5", 80)), 100);//这里一定要配置，表示一个域名的连接池的连接数
+                connManager.setMaxPerRoute(new HttpRoute(new HttpHost("10.1.9.5", 80)), 100);//这里一定要配置，表示每个域名的连接池的连接数
     
                 // RequestConfig requestConfig = RequestConfig.custom()
                 // .setSocketTimeout(3000)
