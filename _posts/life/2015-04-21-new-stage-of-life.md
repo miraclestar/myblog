@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 又一个里程碑--当爸了
-category: fiction
+category: life
 ---
 ##{{ page.title }}
 已经过去一个月了，那一刻仍然历历在目，
