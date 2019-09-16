@@ -7,6 +7,6 @@ author :
   name : miracle 刘
   email : liuhongyuan99@gmail.com
   github : miraclestar
-production_url : http://blog.xmark.info
 atom_path : /atom.xml
 rss_path : /rss.xml
+theme: jekyll-theme-tactile
